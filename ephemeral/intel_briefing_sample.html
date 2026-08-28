@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weekly Intelligence Briefing</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #38bdf8;
+      --border: #334155;
+      --code-bg: #0b1120;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.7;
+      padding: 2.5rem 1.25rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .article-container {
+      max-width: 800px;
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+    }
+    h1, h2, h3, h4 { color: #ffffff; margin-top: 1.5rem; margin-bottom: 0.75rem; font-weight: 700; }
+    h1 { font-size: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; margin-top: 0; }
+    h2 { font-size: 1.5rem; }
+    p, ul, ol { margin-bottom: 1.2rem; color: #cbd5e1; }
+    ul, ol { padding-left: 1.5rem; }
+    li { margin-bottom: 0.35rem; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    code { background: var(--code-bg); padding: 0.2rem 0.4rem; border-radius: 6px; font-family: monospace; font-size: 0.9em; color: #f472b6; }
+    pre { background: var(--code-bg); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; overflow-x: auto; margin-bottom: 1.2rem; }
+    pre code { background: none; padding: 0; color: #e2e8f0; }
+    blockquote { border-left: 4px solid var(--accent); padding-left: 1rem; margin-left: 0; margin-bottom: 1.2rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 1.2rem; }
+    th, td { border: 1px solid var(--border); padding: 0.75rem 1rem; text-align: left; }
+    th { background: #0f172a; color: #ffffff; }
+    tr:nth-child(even) { background: rgba(255, 255, 255, 0.02); }
+  </style>
+</head>
+<body>
+  <main class="article-container">
+    <h1>Weekly Intelligence Briefing</h1>
+<p>Welcome to the ephemeral report demo.</p>
+<h2>Key Highlights</h2>
+<ul>
+<li><strong>Automated HTML Wrapping</strong>: Raw Markdown is wrapped into a clean, modern HTML presentation.</li>
+<li><strong>Attribution Footer</strong>: Automatically indicates when this post will expire.</li>
+<li><strong>Zero Build Cost</strong>: Unlimited hosting via GitHub Pages without Netlify credit drain.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Feature</th>
+<th style="text-align: left;">Support</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Markdown Tables</td>
+<td style="text-align: left;">Supported</td>
+</tr>
+<tr>
+<td style="text-align: left;">Code Blocks</td>
+<td style="text-align: left;">Supported</td>
+</tr>
+<tr>
+<td style="text-align: left;">Expiration Footer</td>
+<td style="text-align: left;">Automatic</td>
+</tr>
+</tbody>
+</table>
+    
+<!-- Ephemeral Attribution Footer -->
+<div id="ephemeral-footer" style="
+  margin-top: 3.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #94a3b8;
+  font-size: 0.85rem;
+  text-align: center;
+">
+  <div style="
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    color: #f59e0b;
+    font-weight: 500;
+  ">
+    <span style="width: 6px; height: 6px; border-radius: 50%; background: #f59e0b; display: inline-block;"></span>
+    <span>⚡ Ephemeral Link &bull; Expires on or after <strong>August 31, 2026 at 08:29 AM</strong></span>
+  </div>
+  <div style="font-size: 0.75rem; opacity: 0.8;">
+    Managed automatically by <strong>Web-Foundry</strong> (TTL: 3 days)
+  </div>
+</div>
+
+  </main>
+</body>
+</html>
