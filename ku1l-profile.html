@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KU1L - Michael L Jackson | Radio-Foundry Station Profile</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-dark: #0284c7;
+      --code-bg: #0b1120;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.7;
+      padding: 2.5rem 1.25rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .profile-card {
+      max-width: 900px;
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+    }
+    .hero {
+      text-align: center;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--card-border);
+      margin-bottom: 2rem;
+    }
+    .callsign {
+      font-size: 3rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: var(--accent);
+      margin-bottom: 0.25rem;
+    }
+    .name {
+      font-size: 1.5rem;
+      color: #ffffff;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    .badges {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 1.25rem;
+    }
+    .badge {
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+    .badge-primary { background: var(--accent-dark); color: #ffffff; }
+    .badge-secondary { background: #334155; color: #cbd5e1; }
+    .grids {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+    .section {
+      margin-bottom: 2rem;
+    }
+    .section-title {
+      font-size: 1.35rem;
+      color: #ffffff;
+      margin-bottom: 0.85rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    p, li { color: #cbd5e1; margin-bottom: 0.75rem; }
+    ul { padding-left: 1.5rem; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .box {
+      background: #0b1120;
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 1.25rem;
+      margin-top: 0.75rem;
+    }
+    .footer {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+  </style>
+</head>
+<body>
+  <main class="profile-card">
+    <div class="hero">
+      <div class="callsign">KU1L</div>
+      <div class="name">Michael L Jackson</div>
+      <div class="badges">
+        <span class="badge badge-primary">AMATEUR EXTRA</span>
+        <span class="badge badge-secondary">ARRL Member</span>
+        <span class="badge badge-secondary">GMRS: WSAP259</span>
+      </div>
+      <div class="grids">
+        🌲 <strong>Carlisle, MA</strong> (<span style="color: var(--accent);">FN42in</span>) &nbsp;⇋&nbsp; 🌾 <strong>Calloway County, KY</strong> (<span style="color: var(--accent);">EM56uo</span>)
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">🎙️ Welcome & Station Overview</h2>
+      <p>
+        Welcome to the official <strong>KU1L</strong> station portal and Radio-Foundry hub. I began my amateur radio journey in 2024, earning Technician in February 2024, General in September 2024, and Amateur Extra in May 2025.
+      </p>
+      <p>
+        I split operating time between our primary shack in <strong>Carlisle, MA</strong> and our outpost at the <strong>Kentucky Farm (Calloway County, KY)</strong>, frequently traveling the I-90 / Ohio corridor.
+      </p>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">🤝 Clubs & Community</h2>
+      <ul>
+        <li><strong>Paducah Amateur Radio Club (W4NJA / W4PBD):</strong> Weekly lunch gatherings and exam administration.</li>
+        <li><strong>Murray State University ARC (K4MSU):</strong> Warm thanks to KJ4W, W4IRT, K9OIM, K4CHW, KN4IRN, KN4KYU.</li>
+        <li><strong>Massachusetts Clubs:</strong> PART of Westford (WB1GOF), BARS (W1ND), and Minuteman Repeater Association (MMRA).</li>
+        <li><strong>Mentors:</strong> Special thanks to Shawn (N1CVO), Glenn (VE1IJ), and Rich (K1SIB).</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">📻 Equipment Fleet</h2>
+      <div class="box">
+        <p><strong>HF & All-Mode:</strong> Yaesu FTDX10, FTDX-3000, FT-991A (KY Farm), ICOM IC-7000 (Mobile).</p>
+        <p><strong>VHF/UHF & Satellite:</strong> ICOM IC-9700, Alinco DR-735, Yaesu FTM-400DR, Kenwood TH-D74A, TIDRADIO H8, Wouxun KG-UV980P.</p>
+        <p><strong>Digital Voice:</strong> SharkRF openSPOT4 Pro (434.900 MHz) & Shack Pi-Star node.</p>
+        <p style="margin-bottom: 0;"><strong>Antennas:</strong> Buckmaster OCF 7-Band Dipole, 10-80m multi-band dipoles, high-gain VHF/UHF verticals, wideband SDR discones.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">⚡ Radio-Foundry Automation & Control Plane</h2>
+      <p>
+        Operating two remote shacks 800 miles apart led to the creation of <strong>Radio-Foundry</strong>—a modern Linux-native "Radio-as-Code" control plane:
+      </p>
+      <ul>
+        <li><strong>Tailscale Encrypted Mesh:</strong> Sub-100ms bi-directional Opus audio and CAT rig control over headless Linux edge nodes.</li>
+        <li><strong>Winlink & Digital Modes:</strong> Headless Pat Winlink daemon with automated CAT dial tuning and WSJT-X (FT8) with Chrony sub-microsecond precision.</li>
+        <li><strong>Live NetLogger Integration:</strong> Automated active net tracking with 1-click transceiver tuning.</li>
+        <li><strong>Smart Power & Protection:</strong> Shelly In-Wall relays, Sonoff S31 power monitoring, and automated Paradan antenna grounding.</li>
+      </ul>
+    </div>
+
+    <div class="footer">
+      <div>
+        📬 <strong>Contact:</strong> <a href="mailto:michael@foundry.local">michael@foundry.local</a> &bull; QSL via LoTW, QRZ Logbook, or Direct.
+      </div>
+      <div>
+        Radio-Foundry &bull; Updated: August 28, 2026
+      </div>
+    </div>
+  </main>
+</body>
+</html>
