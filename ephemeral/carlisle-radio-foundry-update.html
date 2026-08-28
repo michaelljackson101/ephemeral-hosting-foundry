@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Field Report: Building Radio-Foundry (Kentucky Farm ⇋ Carlisle)</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #38bdf8;
+      --border: #334155;
+      --code-bg: #0b1120;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.7;
+      padding: 2.5rem 1.25rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .article-container {
+      max-width: 800px;
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+    }
+    h1, h2, h3, h4 { color: #ffffff; margin-top: 1.5rem; margin-bottom: 0.75rem; font-weight: 700; }
+    h1 { font-size: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; margin-top: 0; }
+    h2 { font-size: 1.5rem; }
+    p, ul, ol { margin-bottom: 1.2rem; color: #cbd5e1; }
+    ul, ol { padding-left: 1.5rem; }
+    li { margin-bottom: 0.35rem; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    code { background: var(--code-bg); padding: 0.2rem 0.4rem; border-radius: 6px; font-family: monospace; font-size: 0.9em; color: #f472b6; }
+    pre { background: var(--code-bg); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; overflow-x: auto; margin-bottom: 1.2rem; }
+    pre code { background: none; padding: 0; color: #e2e8f0; }
+    blockquote { border-left: 4px solid var(--accent); padding-left: 1rem; margin-left: 0; margin-bottom: 1.2rem; color: var(--text-muted); font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 1.2rem; }
+    th, td { border: 1px solid var(--border); padding: 0.75rem 1rem; text-align: left; }
+    th { background: #0f172a; color: #ffffff; }
+    tr:nth-child(even) { background: rgba(255, 255, 255, 0.02); }
+  </style>
+</head>
+<body>
+  <main class="article-container">
+    <h1>📡 Field Report: Building Radio-Foundry</h1>
+<h2>Cross-Country Remote Operations, Smart Power &amp; "Radio-as-Code"</h2>
+<p><strong>Location Dispatch:</strong> Kentucky Farm (Calloway County, KY · Grid: EM56uo) ⇋ Carlisle, MA (Grid: FN42in)<br />
+<strong>Author:</strong> Michael (Carlisle, MA)<br />
+<strong>Date:</strong> Late Summer 2026  </p>
+<hr />
+<h2>🎙️ A Quick Update for the Carlisle Ham Crew</h2>
+<p>Over the last two to three weeks down at the Kentucky Farm, I’ve been putting together a modern, software-driven ham radio control plane that we call <strong>Radio-Foundry</strong>. </p>
+<p>Like many of us, I’ve often wanted a clean, reliable way to operate, monitor, and log across two different shacks—whether sitting in my home office in Carlisle, standing in the barn at the Kentucky farm with a smartphone, or traveling on the road.</p>
+<p>Rather than relying on clunky, bandwidth-heavy remote desktop apps (like TeamViewer, AnyDesk, or VNC) that constantly freeze or drop audio, we built a <strong>browser-first, Linux-native "Radio-as-Code" ecosystem</strong>. </p>
+<p>Here is a quick overview of what we've built, how it works under the hood, and where we're taking it next!</p>
+<hr />
+<h2>🧭 The High-Level Architecture</h2>
+<p>At the heart of the system is an encrypted, zero-configuration <strong>Tailscale mesh network</strong> connecting low-power, headless Linux nodes (HP EliteDesk Minis and Dell Wyse sentinels) co-located with the radios at both locations.</p>
+<pre><code class="language-mermaid">flowchart TD
+    subgraph MobileAndWeb [&quot;📱 Anywhere Access&quot;]
+        Phone[&quot;📱 Smartphone / Mobile Foundry&quot;]
+        Laptop[&quot;💻 Browser / Streamlit Shack UI&quot;]
+        AI[&quot;🤖 AI Assistant via Radio MCP&quot;]
+    end
+
+    subgraph Mesh [&quot;🔒 Tailscale Encrypted Mesh (WireGuard)&quot;]
+        Tunnel[Low-Latency Control &amp; Bi-Directional Audio]
+    end
+
+    subgraph KYFarm [&quot;🌾 Kentucky Farm Shack (EM56uo)&quot;]
+        NodeKY[&quot;🐧 Station Host (home-linux-1 / 7)&quot;]
+        PowerKY[&quot;⚡ Shelly &amp; Sonoff S31 Smart Relays&quot;]
+        RigKY1[&quot;📻 Yaesu FT-991A (HF/VHF/UHF/C4FM)&quot;]
+        RigKY2[&quot;📻 Kenwood TH-D74A (APRS/D-STAR)&quot;]
+        HotspotKY[&quot;📶 SharkRF openSPOT4 Pro (434.900 MHz)&quot;]
+    end
+
+    subgraph CarlisleShack [&quot;🌲 Carlisle, MA Shack (FN42in)&quot;]
+        NodeMA[&quot;🐧 Sentinel Node (home-wyse-31 / HP Mini)&quot;]
+        SDRMA[&quot;📡 SDRplay RSPdx-R2 (1kHz - 2GHz Waterfall)&quot;]
+        RigsMA[&quot;📻 Yaesu FTDX10 / ICOM IC-9700&quot;]
+    end
+
+    Phone --&gt; Tunnel
+    Laptop --&gt; Tunnel
+    AI --&gt; Tunnel
+
+    Tunnel --&gt; NodeKY
+    Tunnel --&gt; NodeMA
+
+    NodeKY --&gt; PowerKY
+    NodeKY --&gt; RigKY1
+    NodeKY --&gt; RigKY2
+    NodeKY --&gt; HotspotKY
+
+    NodeMA --&gt; SDRMA
+    NodeMA --&gt; RigsMA
+</code></pre>
+<hr />
+<h2>⚡ What We've Built Over the Last 2–3 Weeks</h2>
+<h3>1. 📱 Dual-Shack Remote Control via Mobile &amp; Web</h3>
+<ul>
+<li><strong>Zero Desktop Windows Needed:</strong> The station runs headlessly on Linux using <code>hamlib</code> (<code>rigctld</code>). Everything is accessible from a responsive web dashboard that fits right on a smartphone or tablet screen.</li>
+<li><strong>Instant QTH Switching:</strong> With a single dropdown in the sidebar, the control plane switches its profile, frequency channels, and CAT ports between Carlisle, MA and the Kentucky Farm.</li>
+<li><strong>Smart Physical Speaker Control:</strong> Built custom CAT attenuation so we can independently adjust or mute the physical speaker in the radio room while keeping clean digital audio streaming to our remote headset.</li>
+</ul>
+<pre><code class="language-mermaid">sequenceDiagram
+    autonumber
+    actor Op as 📱 Michael (Mobile / Phone)
+    participant UI as 🌐 Radio-Foundry Web UI
+    participant Daemon as 🐧 Linux Edge Node (rigctld)
+    participant Rig as 📻 Transceiver (FT-991A / FTDX10)
+    participant Audio as 🔊 Low-Latency Opus Stream
+
+    Op-&gt;&gt;UI: Select Net or Tap Frequency (e.g. 145.390 MHz)
+    UI-&gt;&gt;Daemon: Send Hamlib CAT Command
+    Daemon-&gt;&gt;Rig: Set Frequency, Mode, Squelch &amp; Power
+    Rig--&gt;&gt;Daemon: Telemetry ACK (Power, SWR, VFO)
+    Daemon--&gt;&gt;UI: Real-Time S-Meter &amp; Rig Status
+    Rig-&gt;&gt;Audio: USB Soundcard Capture
+    Audio--&gt;&gt;Op: Bi-Directional Audio to Phone/Headset
+</code></pre>
+<hr />
+<h3>2. 🔌 Smart Power Sequencing &amp; Remote Safety</h3>
+<p>Leaving transmitters and power supplies powered on 800 miles away can make anyone nervous. We implemented automated smart switching to solve this:<br />
+* <strong>Remote Power Cut:</strong> Built smart REST/MQTT integration with <strong>Shelly In-Wall relays</strong> and <strong>Sonoff S31 smart switches</strong> to cleanly cut power to 13.8V linear/switching power supplies.<br />
+* <strong>Graceful CAT Shutdown:</strong> Before cutting AC power, the system issues software CAT sleep commands (<code>PS0;</code>) to safely park the transceiver's memory.<br />
+* <strong>Failsafe Antenna Isolation:</strong> Integrated relay-driven coaxial disconnects so antennas automatically drop to hard earth ground when the station is powered down.</p>
+<hr />
+<h3>3. 📨 Digital Modes &amp; Emergency Communications</h3>
+<ul>
+<li><strong>Pat Winlink Web Client:</strong> Deployed a dedicated Winlink client daemon (<code>pat-http</code>) running on the shack Linux node. It integrates with <code>rigctld</code> for automated dial tuning across HF Winlink RMS gateways and local VHF packet nodes.</li>
+<li><strong>WSJT-X &amp; FT8 Precision Timing:</strong> Installed WSJT-X alongside <strong>Chrony</strong>, delivering sub-microsecond (0.34µs) precision time synchronization across our network nodes for reliable weak-signal FT8/FT4 digital decoding.</li>
+<li><strong>Digital Voice Hotspot (SharkRF openSPOT4 Pro):</strong> Fully integrated automated status monitoring and profile switching on <code>434.900 MHz</code> for cross-mode C4FM, DMR, and D-STAR connectivity.</li>
+</ul>
+<hr />
+<h3>4. 🌐 Live NetLogger &amp; Scheduled Net Automation</h3>
+<ul>
+<li><strong>Live NetLogger Cluster Scraper:</strong> Built a lightweight client that queries NetLogger's real-time API. It displays all active on-air nets with band, mode, and check-in counts.</li>
+<li><strong>1-Click "Tune to Net":</strong> Spot a net in the dashboard (e.g., the local Marshall County Net or a regional 40m/80m traffic net), click <strong>"📡 Tune Radio"</strong>, and the rig instantly snaps to the exact net frequency and mode.</li>
+<li><strong>Calendar Sync:</strong> Connected with <strong>Fastmail CalDAV</strong> (<code>MLJ Ham Radio</code> calendar) to maintain a synchronized schedule of all our favorite weekly nets across New England and Kentucky.</li>
+</ul>
+<pre><code class="language-mermaid">flowchart LR
+    NetLoggerAPI[&quot;📡 NetLogger Active Nets API&quot;] --&gt; Scraper[&quot;⚙️ NetLogger Client (Python)&quot;]
+    Scraper --&gt; Dashboard[&quot;🖥️ Streamlit Shack Dashboard&quot;]
+    Dashboard --&gt;|1-Click Tune| CAT[&quot;⚡ Hamlib CAT Interface&quot;]
+    CAT --&gt;|Snap VFO| Radio[&quot;📻 Transceiver VFO&quot;]
+    CalDAV[&quot;📅 Fastmail CalDAV Net Schedule&quot;] --&gt; Dashboard
+</code></pre>
+<hr />
+<h3>5. 🤖 AI-First Ham Radio Assistant (Model Context Protocol)</h3>
+<p>One of the most exciting experimental pieces is our <strong>Amateur Radio MCP Server</strong>. <br />
+* Allows local AI assistants to safely query our rigs, read S-meters, adjust VFOs, look up callsigns via QRZ XML, and transcribe audio from recorded nets ("Net Scribe").<br />
+* Everything is authenticated and sandboxed so it operates strictly within ham radio best practices and station safety limits.</p>
+<hr />
+<h2>🛠️ The Technology Stack</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Layer</th>
+<th style="text-align: left;">Technologies Used</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Mesh Networking</strong></td>
+<td style="text-align: left;">Tailscale (WireGuard mesh, low latency, no open inbound firewall ports)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Edge Hardware</strong></td>
+<td style="text-align: left;">HP EliteDesk Mini 800 (x86_64 Linux), Dell Wyse 3040 Thin Clients</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>CAT &amp; Radio Control</strong></td>
+<td style="text-align: left;">Hamlib <code>rigctld</code>, Python 3.12, PySerial, Persistent <code>/dev/serial/by-id/</code> bindings</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>UI &amp; Web Dashboard</strong></td>
+<td style="text-align: left;">Streamlit, HTML5 Audio, WebSockets, Python REST APIs</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Digital &amp; Voice</strong></td>
+<td style="text-align: left;">Pat Winlink, WSJT-X, Direwolf TNC, SharkRF openSPOT4 Pro, Opus Audio</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Smart Power</strong></td>
+<td style="text-align: left;">Shelly Plus 1PM, Sonoff S31 (Tasmota / ESPHome), Mosquitto MQTT</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Infrastructure as Code</strong></td>
+<td style="text-align: left;">Ansible playbooks for automated deployment across all Linux shack nodes</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>🚀 What We're Working on Next</h2>
+<ol>
+<li><strong>SDR Waterfall Streaming:</strong> Hooking up the SDRplay RSPdx-R2 to pipe a live, wideband RF spectrum waterfall directly to the web dashboard.</li>
+<li><strong>Meshtastic &amp; LoRa Mesh Relays:</strong> Deploying localized 915 MHz LoRa nodes between the farm perimeter and the main shack for sensor and off-grid messaging.</li>
+<li><strong>Automated HF Beam / Rotator Control:</strong> Integrating azimuth control for directional antennas directly into the web UI.</li>
+</ol>
+<hr />
+<h2>🤝 Let's Connect On the Air!</h2>
+<p>If anyone wants to try a remote check-in, test out digital modes, or see a live demo of the dashboard and audio stream, let me know. I'd love to show you how it works and share ideas for your own shack setups!</p>
+<p>73,<br />
+<strong>Michael</strong><br />
+<em>Carlisle, MA &amp; Calloway County, KY</em></p>
+    
+<!-- Ephemeral Attribution Footer -->
+<div id="ephemeral-footer" style="
+  margin-top: 3.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #94a3b8;
+  font-size: 0.85rem;
+  text-align: center;
+">
+  <div style="
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    color: #f59e0b;
+    font-weight: 500;
+  ">
+    <span style="width: 6px; height: 6px; border-radius: 50%; background: #f59e0b; display: inline-block;"></span>
+    <span>⚡ Ephemeral Link &bull; Expires on or after <strong>September 04, 2026 at 10:49 AM</strong></span>
+  </div>
+  <div style="font-size: 0.75rem; opacity: 0.8;">
+    Managed automatically by <strong>Web-Foundry</strong> (TTL: 7 days)
+  </div>
+</div>
+
+  </main>
+</body>
+</html>
