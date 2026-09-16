@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To Ayesha & Heather — With Gratitude | MRO GenAI Family</title>
+  
+  <!-- Meta tags for SEO and sharing -->
+  <meta name="description" content="A warm, celebratory farewell card for Ayesha Shafquat and Heather Vibas from the MRO GenAI family.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,400;1,600&display=swap" rel="stylesheet">
+  
+  <!-- GSAP Animation Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Ambient floating embers background -->
+  <canvas id="ember-canvas"></canvas>
+
+  <!-- Sticky Top Navigation / Sound Bar -->
+  <header class="top-nav">
+    <div class="brand-badge">
+      <span class="brand-icon">🔥</span>
+      <span>Air Force Oracle EBS • MRO GenAI Team</span>
+    </div>
+
+    <div class="audio-controls">
+      <button id="audio-toggle-btn" class="music-btn" title="Toggle acoustic guitar and piano soundtrack">
+        <span id="music-btn-icon">🎵</span>
+        <span id="music-btn-label">Play Soundtrack</span>
+        <div class="eq-bars">
+          <div class="eq-bar"></div>
+          <div class="eq-bar"></div>
+          <div class="eq-bar"></div>
+          <div class="eq-bar"></div>
+        </div>
+      </button>
+    </div>
+  </header>
+
+  <main class="main-wrapper">
+    <!-- Header Hero -->
+    <section class="card-header-hero">
+      <div class="team-pill">
+        <span>✨ Evelyn Torsher’s GenAI Family Send-Off</span>
+      </div>
+      <h1 class="card-title">To Ayesha & Heather — With Gratitude</h1>
+      <p class="card-subtitle">Celebrating the energy, intellect, and community you built with us, and the bright horizons waiting ahead.</p>
+    </section>
+
+    <!-- Centerpiece Interactive Scene Frame -->
+    <section id="scene-showcase" class="scene-showcase">
+      <div class="scene-media-frame">
+        <img src="assets/mro_farewell_art.jpg" alt="Ayesha and Heather at the MRO GenAI campfire" class="scene-artwork">
+
+        <!-- SVG Animation & Interactive Overlay -->
+        <svg id="scene-overlay-svg" class="scene-overlay-svg" viewBox="0 0 1600 900" preserveAspectRatio="none">
+          <defs>
+            <!-- Campfire flicker glow filter -->
+            <filter id="campfireGlow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="15" result="blur1"/>
+              <feGaussianBlur in="SourceGraphic" stdDeviation="30" result="blur2"/>
+              <feMerge>
+                <feMergeNode in="blur2"/>
+                <feMergeNode in="blur1"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+
+            <!-- Gradient for Heather's forward path into the horizon -->
+            <linearGradient id="heatherRayGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+              <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.2"/>
+              <stop offset="60%" stop-color="#fde047" stop-opacity="0.8"/>
+              <stop offset="100%" stop-color="#ffffff" stop-opacity="1"/>
+            </linearGradient>
+
+            <!-- Gradient for Ayesha's looping bridge orbit -->
+            <linearGradient id="ayeshaOrbitGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.9"/>
+              <stop offset="50%" stop-color="#818cf8" stop-opacity="0.8"/>
+              <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.3"/>
+            </linearGradient>
+          </defs>
+
+          <!-- Heather's Radiant Path of Light (Forward Motion into Open Door) -->
+          <g id="heather-path-group">
+            <path id="heather-light-path" class="anim-heather-light" d="M 640,560 Q 520,480 430,340" fill="none" stroke="url(#heatherRayGrad)" stroke-width="6" stroke-linecap="round" filter="url(#campfireGlow)" />
+            <circle cx="430" cy="340" r="12" fill="#ffffff" filter="url(#campfireGlow)" opacity="0.9">
+              <animate attributeName="r" values="8;16;8" dur="2.5s" repeatCount="indefinite" />
+            </circle>
+          </g>
+
+          <!-- Ayesha's Gentle Looping Return Path & Orbit ("See You in the New Year") -->
+          <g id="ayesha-path-group">
+            <path id="ayesha-bridge-orbit" class="anim-ayesha-bridge" d="M 960,560 C 1100,500 1350,560 1380,480 C 1410,400 1200,410 1020,480" fill="none" stroke="url(#ayeshaOrbitGrad)" stroke-width="5" stroke-linecap="round" filter="url(#campfireGlow)" />
+            
+            <!-- Crescent Moon / Hourglass Motif near the Bridge Loop -->
+            <g transform="translate(1330, 420) scale(0.9)">
+              <circle cx="0" cy="0" r="18" fill="none" stroke="#bae6fd" stroke-width="2" opacity="0.6" stroke-dasharray="3,3">
+                <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="18s" repeatCount="indefinite"/>
+              </circle>
+              <!-- Crescent Moon -->
+              <path d="M -6,-10 A 12 12 0 1 0 10 6 A 9 9 0 1 1 -6 -10 Z" fill="#fef08a" opacity="0.85">
+                <animate attributeName="opacity" values="0.7;1;0.7" dur="3s" repeatCount="indefinite" />
+              </path>
+            </g>
+          </g>
+
+          <!-- Champions Network Constellation Overlay (Heather's 40-person POC network) -->
+          <g id="constellation-lines" opacity="0.75">
+            <polyline points="120,780 220,720 300,750 240,840 140,860 120,780" fill="none" stroke="#facc15" stroke-width="2.5" stroke-dasharray="5,4" />
+            <line x1="220" y1="720" x2="380" y2="700" stroke="#facc15" stroke-width="2" stroke-dasharray="4,4" />
+            <line x1="300" y1="750" x2="420" y2="790" stroke="#facc15" stroke-width="2" stroke-dasharray="4,4" />
+            
+            <!-- Pulsing constellation nodes -->
+            <circle cx="120" cy="780" r="5" fill="#fff"><animate attributeName="r" values="4;7;4" dur="2.2s" repeatCount="indefinite"/></circle>
+            <circle cx="220" cy="720" r="6" fill="#fff"><animate attributeName="r" values="5;8;5" dur="1.8s" repeatCount="indefinite"/></circle>
+            <circle cx="300" cy="750" r="5" fill="#fff"><animate attributeName="r" values="4;7;4" dur="2.5s" repeatCount="indefinite"/></circle>
+            <circle cx="240" cy="840" r="5.5" fill="#fff"><animate attributeName="r" values="4.5;7.5;4.5" dur="2s" repeatCount="indefinite"/></circle>
+          </g>
+
+          <!-- Technical Testing Gears & Circuit Pulse (Ayesha's technical & testing engine) -->
+          <g id="tech-gears-group" transform="translate(1380, 780)" opacity="0.85">
+            <circle cx="0" cy="0" r="45" fill="none" stroke="#38bdf8" stroke-width="2" stroke-dasharray="6,6">
+              <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="20s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="65" cy="-35" r="28" fill="none" stroke="#f6c065" stroke-width="2" stroke-dasharray="4,4">
+              <animateTransform attributeName="transform" type="rotate" from="360" to="0" dur="14s" repeatCount="indefinite"/>
+            </circle>
+            <!-- Circuit trace paths -->
+            <polyline points="0,45 0,75 50,75 80,105" fill="none" stroke="#38bdf8" stroke-width="2.5" />
+            <circle cx="80" cy="105" r="4" fill="#38bdf8">
+              <animate attributeName="opacity" values="0.4;1;0.4" dur="1.5s" repeatCount="indefinite" />
+            </circle>
+          </g>
+
+          <!-- Campfire Flame Heart Pulse -->
+          <circle cx="800" cy="720" r="60" fill="url(#campfireGlow)" opacity="0.4" class="anim-campfire" />
+        </svg>
+
+        <!-- Interactive Hotspots on Top of Scene -->
+        <div class="hotspot hotspot-champions" data-type="champions" title="Heather's 40-Person Champions Network">
+          <div class="hotspot-pulse"><div class="hotspot-dot"></div></div>
+          <div class="hotspot-tooltip">
+            <strong>Champions Network</strong>
+            <span>Heather's 40-person aerospace POC network connecting GenAI across the enterprise.</span>
+          </div>
+        </div>
+
+        <div class="hotspot hotspot-newsletter" data-type="newsletter" title="The GenAI Newsletter">
+          <div class="hotspot-pulse"><div class="hotspot-dot"></div></div>
+          <div class="hotspot-tooltip">
+            <strong>The Team Newsletter</strong>
+            <span>Heather's witty, engaging updates everyone actually looked forward to opening.</span>
+          </div>
+        </div>
+
+        <div class="hotspot hotspot-campfire" data-type="campfire" title="The MRO GenAI Hearth">
+          <div class="hotspot-pulse"><div class="hotspot-dot"></div></div>
+          <div class="hotspot-tooltip">
+            <strong>The MRO Hearth</strong>
+            <span>Where Evelyn's small AI team shared laughs, debugged tests, and made magic happen.</span>
+          </div>
+        </div>
+
+        <div class="hotspot hotspot-table" data-type="table" title="Lunch-and-Learn Table">
+          <div class="hotspot-pulse"><div class="hotspot-dot"></div></div>
+          <div class="hotspot-tooltip">
+            <strong>Lunch & Learn Table</strong>
+            <span>Coffee, curiosity, and lively discussions that sparked our best ideas.</span>
+          </div>
+        </div>
+
+        <div class="hotspot hotspot-gears" data-type="gears" title="Ayesha's Testing & Dev Engine">
+          <div class="hotspot-pulse"><div class="hotspot-dot"></div></div>
+          <div class="hotspot-tooltip">
+            <strong>Ayesha's Testing Engine</strong>
+            <span>Steadfast technical partnership, clean pipelines, and bulletproof test coverage.</span>
+          </div>
+        </div>
+
+        <div class="hotspot hotspot-heather-path" data-type="heather-path" title="Heather's Open Door Horizon">
+          <div class="hotspot-pulse"><div class="hotspot-dot"></div></div>
+          <div class="hotspot-tooltip">
+            <strong>Heather's Open Door</strong>
+            <span>Stepping into a bright new assignment on the horizon. Go build great things!</span>
+          </div>
+        </div>
+
+        <div class="hotspot hotspot-ayesha-bridge" data-type="ayesha-bridge" title="Ayesha's 'See You Soon' Bridge">
+          <div class="hotspot-pulse"><div class="hotspot-dot"></div></div>
+          <div class="hotspot-tooltip">
+            <strong>Ayesha's Return Bridge</strong>
+            <span>Away for a season to grow your family—your seat is saved for the new year!</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Caption & Legend Bar -->
+      <div class="scene-caption-bar">
+        <div class="scene-legend">
+          <div class="legend-item">
+            <span class="legend-color heather"></span>
+            <span>Heather's Open Door Horizon</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-color ayesha"></span>
+            <span>Ayesha's Return Bridge Loop</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-color hearth"></span>
+            <span>The Team Hearth</span>
+          </div>
+        </div>
+
+        <button id="replay-animation-btn" class="animation-replay-btn">
+          <span>✨ Replay Animation</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Tribute Card Narrative Section -->
+    <article id="tribute-narrative-card" class="tribute-card">
+      <div class="team-origins-tag">
+        <span>🌱 Grown under Evelyn Torsher • Air Force Oracle EBS MRO Program</span>
+      </div>
+
+      <p class="tribute-narrative">
+        When we look back at how this small GenAI team took root and grew, so much of our warmth, momentum, and technical foundation started with the two of you. <strong>Heather</strong>, your tireless outreach, the newsletter everyone actually looked forward to reading, and the 40-person Champions Network connected our team to the broader aerospace group with genuine spark and heart. <strong>Ayesha</strong>, your steadfast technical partnership, patient problem-solving, and steady hand across testing and development kept our engineering grounded, reliable, and sharp. You didn’t just deliver projects here—you shaped our culture, celebrated each other's wins, and helped build something real that will endure. You are permanently part of this team's story.
+      </p>
+
+      <!-- Split Personalized Messages -->
+      <div class="split-closings">
+        <!-- Heather's Card -->
+        <div class="personal-card card-heather">
+          <div class="symbol-watermark">🚪</div>
+          <div class="personal-header">
+            <div class="avatar-icon-wrap">☀️</div>
+            <div class="person-meta">
+              <h3>Heather Vibas</h3>
+              <span class="person-badge">Next Adventure Ahead</span>
+            </div>
+          </div>
+          <p class="personal-quote">
+            “As you head into your next chapter, we're so grateful for the energy and connection you brought to this team — go build great things, and don't be a stranger.”
+          </p>
+        </div>
+
+        <!-- Ayesha's Card -->
+        <div class="personal-card card-ayesha">
+          <div class="symbol-watermark">🌙</div>
+          <div class="personal-header">
+            <div class="avatar-icon-wrap">🌉</div>
+            <div class="person-meta">
+              <h3>Ayesha Shafquat</h3>
+              <span class="person-badge">See You in the New Year</span>
+            </div>
+          </div>
+          <p class="personal-quote">
+            “As you step away for a while to grow your family, know your seat at this table is waiting — we can't wait to have you back in the new year.”
+          </p>
+        </div>
+      </div>
+
+      <!-- Sign-off Block -->
+      <div class="card-closing">
+        <div class="signature-block">
+          <div class="sign-off-prefix">With appreciation,</div>
+          <div class="family-signature">Your MRO GenAI Family</div>
+          <div class="team-tagline">Air Force Oracle EBS MRO Program</div>
+        </div>
+
+        <button id="open-note-modal-btn" class="leave-note-cta-btn">
+          <span>💌 Leave a Warm Note on the Hearth</span>
+        </button>
+      </div>
+    </article>
+
+    <!-- Community Element: Ring of Notes from Teammates -->
+    <section class="community-section">
+      <div class="community-section-header">
+        <div class="section-eyebrow">Sentiments from the Team</div>
+        <h2>Notes from the Hearth Ring</h2>
+      </div>
+
+      <div id="notes-pinboard" class="notes-pinboard">
+        <!-- Injected via app.js with handwritten styling -->
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="foundry-footer">
+      <div class="footer-quote">"Once part of the MRO GenAI family, always part of the campfire."</div>
+      <div>Crafted with love & gratitude by Greetings-Foundry • 2026</div>
+    </footer>
+  </main>
+
+  <!-- Add Note Modal -->
+  <div id="note-modal-overlay" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3>Pin a Note to the Hearth</h3>
+        <button id="close-modal-btn" class="close-modal-btn">&times;</button>
+      </div>
+      <form id="new-note-form">
+        <div class="form-group">
+          <label for="note-author-input">Your Name</label>
+          <input type="text" id="note-author-input" class="form-control" placeholder="e.g. Evelyn, Alex, Dev Teammate" required>
+        </div>
+        <div class="form-group">
+          <label for="note-role-input">Role / Team (Optional)</label>
+          <input type="text" id="note-role-input" class="form-control" placeholder="e.g. MRO GenAI, Aerospace POC, Testing Lead">
+        </div>
+        <div class="form-group">
+          <label for="note-message-input">Your Message</label>
+          <textarea id="note-message-input" class="form-control" placeholder="Share a warm memory, inside joke, or heartfelt send-off..." required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="note-color-select">Note Color</label>
+          <select id="note-color-select" class="form-control">
+            <option value="amber">Warm Campfire Amber</option>
+            <option value="rose">Sunset Rose</option>
+            <option value="cyan">Bright Sky Cyan</option>
+            <option value="emerald">Fresh Dawn Emerald</option>
+            <option value="violet">Twilight Violet</option>
+            <option value="blue">Deep Ocean Blue</option>
+          </select>
+        </div>
+        <div class="modal-actions">
+          <button type="button" id="cancel-modal-btn" class="btn-secondary">Cancel</button>
+          <button type="submit" class="btn-primary">Pin to Hearth</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
