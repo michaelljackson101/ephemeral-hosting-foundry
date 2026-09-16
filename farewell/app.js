@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCommunityNotes();
   initSceneHotspots();
   initSequenceAnimation();
+  initKeepsakeDownloader();
 });
 
 /* ==========================================================================
@@ -257,6 +258,13 @@ async function initCommunityNotes() {
 
   if (!pinboard) return;
 
+  // 0. If this is a standalone downloaded keepsake, use baked notes
+  if (window.BAKED_KEEPSAKE_NOTES && Array.isArray(window.BAKED_KEEPSAKE_NOTES)) {
+    activeNotes = window.BAKED_KEEPSAKE_NOTES;
+    renderNotes(activeNotes, pinboard);
+    return;
+  }
+
   // 1. Initial Load: Try Local Cache first for instant render
   try {
     const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -502,3 +510,108 @@ function initSequenceAnimation() {
     .to('#tribute-narrative-card', { opacity: 1, y: 0, duration: 1, ease: 'power2.out' }, '-=0.8')
     .to('.personal-card', { opacity: 1, y: 0, duration: 0.8, stagger: 0.2, ease: 'back.out(1.4)' }, '-=0.5');
 }
+
+/* ==========================================================================
+   6. OFFLINE STANDALONE KEEPSAKE HTML GENERATOR
+   Bakes full HTML, Base64 image, embedded CSS, active notes, and audio
+   ========================================================================== */
+function initKeepsakeDownloader() {
+  const downloadBtn = document.getElementById('download-keepsake-btn');
+  if (!downloadBtn) return;
+
+  downloadBtn.addEventListener('click', async () => {
+    const origHtml = downloadBtn.innerHTML;
+    downloadBtn.innerHTML = '<span>⏳</span><span>Packaging Keepsake...</span>';
+    downloadBtn.disabled = true;
+    showToast("Packaging your standalone keepsake card...");
+
+    try {
+      // 1. Convert scene artwork to high-quality Base64 data URL
+      let base64Img = '';
+      const artworkImg = document.querySelector('.scene-artwork');
+      if (artworkImg) {
+        const canvas = document.createElement('canvas');
+        canvas.width = artworkImg.naturalWidth || 1600;
+        canvas.height = artworkImg.naturalHeight || 900;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(artworkImg, 0, 0);
+        base64Img = canvas.toDataURL('image/jpeg', 0.92);
+      }
+
+      // 2. Fetch or extract styles.css text
+      let cssContent = '';
+      try {
+        const cssRes = await fetch('styles.css');
+        if (cssRes.ok) {
+          cssContent = await cssRes.text();
+        }
+      } catch (e) {
+        console.warn("Fetch styles.css failed, falling back to document styles", e);
+      }
+
+      if (!cssContent) {
+        for (let sheet of document.styleSheets) {
+          try {
+            if (sheet.cssRules) {
+              for (let rule of sheet.cssRules) {
+                cssContent += rule.cssText + '\n';
+              }
+            }
+          } catch (err) {}
+        }
+      }
+
+      // 3. Fetch app.js content
+      let appJsContent = '';
+      try {
+        const jsRes = await fetch('app.js');
+        if (jsRes.ok) {
+          appJsContent = await jsRes.text();
+        }
+      } catch (e) {}
+
+      // 4. Construct the complete standalone HTML string
+      let htmlDoc = document.documentElement.outerHTML;
+
+      // Replace stylesheet link with inlined <style>
+      if (cssContent) {
+        htmlDoc = htmlDoc.replace(/<link rel="stylesheet" href="styles\.css">/i, `<style>\n${cssContent}\n</style>`);
+      }
+
+      // Replace relative artwork path with Base64 data URL
+      if (base64Img) {
+        htmlDoc = htmlDoc.replace(/src="assets\/mro_farewell_art\.jpg"/g, `src="${base64Img}"`);
+      }
+
+      // Bake current community notes into the head
+      const bakedNotesJson = JSON.stringify(activeNotes);
+      const bakedScript = `\n  <script>\n    window.BAKED_KEEPSAKE_NOTES = ${bakedNotesJson};\n  </script>`;
+      htmlDoc = htmlDoc.replace(/<\/head>/i, `${bakedScript}\n</head>`);
+
+      // Replace <script src="app.js"></script> with inlined script
+      if (appJsContent) {
+        htmlDoc = htmlDoc.replace(/<script src="app\.js"><\/script>/i, `<script>\n${appJsContent}\n</script>`);
+      }
+
+      // 5. Trigger browser file download
+      const blob = new Blob([htmlDoc], { type: 'text/html;charset=utf-8' });
+      const blobUrl = URL.createObjectURL(blob);
+      const dlLink = document.createElement('a');
+      dlLink.href = blobUrl;
+      dlLink.download = 'MRO_GenAI_Farewell_Keepsake_Ayesha_and_Heather.html';
+      document.body.appendChild(dlLink);
+      dlLink.click();
+      document.body.removeChild(dlLink);
+      URL.revokeObjectURL(blobUrl);
+
+      showToast("Keepsake saved! Open anytime, anywhere. 🎁");
+    } catch (err) {
+      console.error("Failed to generate keepsake", err);
+      showToast("Error packaging keepsake. Please try again.");
+    } finally {
+      downloadBtn.innerHTML = origHtml;
+      downloadBtn.disabled = false;
+    }
+  });
+}
+
