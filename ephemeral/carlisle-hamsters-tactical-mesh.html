@@ -1,0 +1,2338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beyond the Handheld: A Practical Tactical Mesh White Paper</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        
+        :root {
+            
+        --bg-primary: #f8fafc;
+        --bg-card: #ffffff;
+        --text-primary: #0f172a;
+        --text-secondary: #334155;
+        --text-muted: #64748b;
+        --border-color: #e2e8f0;
+        --border-subtle: #f1f5f9;
+        --accent: #2563eb;
+        --accent-glow: rgba(37, 99, 235, 0.12);
+        --code-bg: #f8fafc;
+        --code-text: #0f172a;
+        --table-header-bg: #f8fafc;
+        --table-stripe: #ffffff;
+        --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
+        --badge-bg: #eff6ff;
+        --badge-text: #1d4ed8;
+        --mermaid-theme: default;
+    
+        }
+        :root[data-theme="light"], html[data-theme="light"], body[data-theme="light"] {
+            
+        --bg-primary: #f8fafc;
+        --bg-card: #ffffff;
+        --text-primary: #0f172a;
+        --text-secondary: #334155;
+        --text-muted: #64748b;
+        --border-color: #e2e8f0;
+        --border-subtle: #f1f5f9;
+        --accent: #2563eb;
+        --accent-glow: rgba(37, 99, 235, 0.12);
+        --code-bg: #f8fafc;
+        --code-text: #0f172a;
+        --table-header-bg: #f8fafc;
+        --table-stripe: #ffffff;
+        --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
+        --badge-bg: #eff6ff;
+        --badge-text: #1d4ed8;
+        --mermaid-theme: default;
+    
+        }
+        :root[data-theme="dark"], html[data-theme="dark"], body[data-theme="dark"] {
+            
+        --bg-primary: #0b0f19;
+        --bg-card: #111827;
+        --text-primary: #f9fafb;
+        --text-secondary: #cbd5e1;
+        --text-muted: #94a3b8;
+        --border-color: #1f2937;
+        --border-subtle: #162032;
+        --accent: #60a5fa;
+        --accent-glow: rgba(96, 165, 250, 0.15);
+        --code-bg: #0b1120;
+        --code-text: #f1f5f9;
+        --table-header-bg: #162032;
+        --table-stripe: #0f172a;
+        --card-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
+        --badge-bg: rgba(96, 165, 250, 0.12);
+        --badge-text: #60a5fa;
+        --mermaid-theme: dark;
+    
+        }
+    
+
+        .math-display {
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 0.85rem 1.25rem;
+            margin: 1.25rem 0;
+            text-align: center;
+            background: var(--bg-card);
+            border-radius: 8px;
+            border: 1px solid var(--border-subtle);
+            font-family: 'STIX Two Math', 'Cambria Math', 'KaTeX_Main', serif;
+        }
+
+        .math-inline {
+            display: inline;
+            font-family: 'STIX Two Math', 'Cambria Math', 'KaTeX_Main', serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 16px;
+            line-height: 1.7;
+            padding: 2.5rem 1rem;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+        }
+
+        .document-wrapper {
+            width: 100%;
+            max-width: 1040px;
+            margin: 0 auto;
+        }
+
+        .document-card {
+            background-color: var(--bg-card);
+            border-radius: 16px;
+            padding: 3rem 3.5rem;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-color);
+            transition: border-color 0.2s ease;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem 0.5rem;
+            }
+            .document-card {
+                padding: 1.75rem 1.25rem;
+                border-radius: 12px;
+            }
+        }
+
+        /* Header Styling */
+        .document-header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .header-top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .header-brand-title {
+            flex: 1;
+        }
+
+        .document-title {
+            font-size: 2.25rem;
+            font-weight: 700;
+            line-height: 1.25;
+            letter-spacing: -0.025em;
+            color: var(--text-primary);
+            margin-bottom: 0;
+        }
+
+        .quick-actions-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+            padding-top: 4px;
+        }
+
+        .quick-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--border-subtle);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 0.78rem;
+            font-family: inherit;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .quick-action-btn:hover {
+            background: var(--bg-card);
+            color: var(--accent);
+            border-color: var(--accent);
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .theme-icon-sun {
+            display: none;
+        }
+
+        .theme-icon-moon {
+            display: inline-block;
+        }
+
+        :root[data-theme="dark"] .theme-icon-sun,
+        html[data-theme="dark"] .theme-icon-sun,
+        body[data-theme="dark"] .theme-icon-sun {
+            display: inline-block;
+        }
+
+        :root[data-theme="dark"] .theme-icon-moon,
+        html[data-theme="dark"] .theme-icon-moon,
+        body[data-theme="dark"] .theme-icon-moon {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .header-top-row {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .quick-actions-bar {
+                width: 100%;
+                justify-content: flex-start;
+                flex-wrap: wrap;
+            }
+        }
+
+        .header-meta {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            font-size: 0.875rem;
+        }
+
+        .header-subtitle {
+            background: var(--badge-bg);
+            color: var(--badge-text);
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            border: 1px solid var(--accent-glow);
+        }
+
+        .header-attribution {
+            background: var(--border-subtle);
+            color: var(--text-secondary);
+            font-weight: 500;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            border: 1px solid var(--border-color);
+        }
+
+        .header-date {
+            color: var(--text-muted);
+            margin-left: auto;
+        }
+
+        /* Compact Table of Contents Component */
+        .compact-toc {
+            background: var(--border-subtle);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            margin: 1.75rem 0 2.25rem 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .compact-toc .toc-header {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .compact-toc .toc-header::before {
+            content: "";
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+        }
+
+        .compact-toc ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+        }
+
+        .compact-toc li {
+            margin: 0.35rem 0;
+            line-height: 1.45;
+        }
+
+        .compact-toc .toc-h2 {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-top: 0.55rem;
+        }
+
+        .compact-toc .toc-h2:first-child {
+            margin-top: 0;
+        }
+
+        .compact-toc .toc-h3 {
+            font-size: 0.84rem;
+            padding-left: 1.25rem;
+            position: relative;
+        }
+
+        .compact-toc .toc-h3::before {
+            content: "↳";
+            position: absolute;
+            left: 0.25rem;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+        }
+
+        .compact-toc a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.15s ease, transform 0.15s ease;
+            display: inline-block;
+        }
+
+        .compact-toc a:hover {
+            color: var(--accent);
+            transform: translateX(2px);
+        }
+
+        /* Typography & Content */
+        .document-content h1, 
+        .document-content h2, 
+        .document-content h3, 
+        .document-content h4 {
+            color: var(--text-primary);
+            font-weight: 600;
+            line-height: 1.35;
+            letter-spacing: -0.015em;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .document-content h1 { font-size: 1.75rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.5rem; }
+        .document-content h2 { font-size: 1.45rem; }
+        .document-content h3 { font-size: 1.2rem; }
+        .document-content h4 { font-size: 1.05rem; }
+
+        .document-content p {
+            margin-bottom: 1.25rem;
+            color: var(--text-secondary);
+        }
+
+        .document-content p strong {
+            color: var(--text-primary);
+        }
+
+        .document-content a {
+            color: var(--accent);
+            text-decoration: none;
+            border-bottom: 1px solid var(--accent-glow);
+            transition: all 0.2s ease;
+        }
+
+        .document-content a:hover {
+            border-bottom-color: var(--accent);
+        }
+
+        .document-content ul, 
+        .document-content ol {
+            margin-bottom: 1.25rem;
+            padding-left: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .document-content li {
+            margin-bottom: 0.4rem;
+        }
+
+        .document-content hr {
+            border: 0;
+            border-top: 1px solid var(--border-color);
+            margin: 2.25rem 0;
+        }
+
+        /* Inline Code & Code Blocks */
+        .document-content code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875em;
+            background: var(--border-subtle);
+            color: var(--accent);
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+        }
+
+        .document-content pre {
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+
+        .document-content pre code {
+            background: transparent;
+            border: none;
+            padding: 0;
+            color: var(--code-text);
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        /* Table Container & Responsive Styling */
+        .table-container {
+            margin: 1.75rem 0 2.25rem 0;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 14px -3px rgba(0, 0, 0, 0.08);
+            transition: border-color 0.2s ease;
+        }
+
+        .table-container:hover {
+            border-color: var(--accent);
+        }
+
+        .table-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 14px;
+            background: var(--table-header-bg);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .table-toolbar-title {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+        }
+
+        .table-toolbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .table-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 4px 9px;
+            font-size: 0.74rem;
+            font-family: inherit;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .table-action-btn:hover {
+            color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .table-responsive table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0;
+            font-size: 0.9rem;
+            border: none;
+        }
+
+        .table-responsive th {
+            background: var(--table-header-bg);
+            color: var(--text-primary);
+            text-align: left;
+            padding: 0.85rem 1.15rem;
+            font-weight: 600;
+            border-bottom: 2px solid var(--border-color);
+            vertical-align: bottom;
+            line-height: 1.4;
+            white-space: normal;
+        }
+
+        .table-responsive td {
+            padding: 0.85rem 1.15rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            line-height: 1.5;
+            vertical-align: top;
+            word-break: normal;
+            overflow-wrap: break-word;
+        }
+
+        .table-responsive th:first-child,
+        .table-responsive td:first-child {
+            min-width: 190px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .table-responsive th:not(:first-child),
+        .table-responsive td:not(:first-child) {
+            min-width: 140px;
+        }
+
+        .table-responsive tr:nth-child(even) {
+            background: var(--table-stripe);
+        }
+
+        .table-responsive tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Table Modal Lightbox */
+        .table-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            box-sizing: border-box;
+        }
+
+        .table-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .table-modal-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.45);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .table-modal-content {
+            position: relative;
+            z-index: 2;
+            width: 95vw;
+            max-width: 1600px;
+            height: 92vh;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.18);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .table-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 18px;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--bg-card);
+        }
+
+        .table-modal-title {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .table-modal-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .table-modal-btn {
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 5px 12px;
+            font-size: 0.78rem;
+            font-family: inherit;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.15s ease;
+        }
+
+        .table-modal-btn:hover {
+            color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .table-modal-btn.table-modal-close {
+            font-size: 0.95rem;
+            padding: 5px 10px;
+        }
+
+        .table-modal-btn.table-modal-close:hover {
+            color: #ef4444;
+            border-color: #ef4444;
+        }
+
+        .table-modal-body {
+            flex: 1;
+            overflow: auto;
+            padding: 1.5rem;
+            background: var(--bg-card);
+        }
+
+        #table-modal-canvas table {
+            width: 100%;
+            min-width: 900px;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+            border: 1px solid var(--border-color);
+        }
+
+        #table-modal-canvas th {
+            position: sticky;
+            top: 0;
+            background: var(--table-header-bg);
+            color: var(--text-primary);
+            z-index: 10;
+            padding: 0.85rem 1.25rem;
+            border-bottom: 2px solid var(--border-color);
+            text-align: left;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            vertical-align: bottom;
+            line-height: 1.4;
+        }
+
+        #table-modal-canvas td {
+            padding: 0.85rem 1.25rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            word-break: normal;
+            overflow-wrap: break-word;
+            vertical-align: top;
+            line-height: 1.5;
+        }
+
+        #table-modal-canvas th:first-child,
+        #table-modal-canvas td:first-child {
+            min-width: 200px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        #table-modal-canvas th:not(:first-child),
+        #table-modal-canvas td:not(:first-child) {
+            min-width: 150px;
+        }
+
+        #table-modal-canvas tr:nth-child(even) {
+            background: var(--table-stripe);
+        }
+
+        #table-modal-canvas tr:hover {
+            background: var(--border-subtle);
+        }
+
+        .table-modal-footer {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            padding: 8px 18px;
+            background: var(--table-header-bg);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Callouts / Alerts */
+        .callout {
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--accent);
+            background: var(--border-subtle);
+        }
+
+        .callout-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .callout-note { border-left-color: #38bdf8; background: rgba(56, 189, 248, 0.08); }
+        .callout-note .callout-title { color: #38bdf8; }
+
+        .callout-tip { border-left-color: #10b981; background: rgba(16, 185, 129, 0.08); }
+        .callout-tip .callout-title { color: #10b981; }
+
+        .callout-important { border-left-color: #a855f7; background: rgba(168, 85, 247, 0.08); }
+        .callout-important .callout-title { color: #a855f7; }
+
+        .callout-warning { border-left-color: #f59e0b; background: rgba(245, 158, 11, 0.08); }
+        .callout-warning .callout-title { color: #f59e0b; }
+
+        .callout-caution { border-left-color: #ef4444; background: rgba(239, 68, 68, 0.08); }
+        .callout-caution .callout-title { color: #ef4444; }
+
+        .callout-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Images & Pop-Out Lightbox */
+        .document-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            border: 1px solid var(--border-color);
+            display: block;
+            cursor: zoom-in;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .document-content img:hover {
+            transform: scale(1.01);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        /* Image Lightbox Modal */
+        .image-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            box-sizing: border-box;
+        }
+
+        .image-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image-modal-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.45);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .image-modal-content {
+            position: relative;
+            z-index: 2;
+            width: 95vw;
+            max-width: 1600px;
+            height: 92vh;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.18);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .image-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--bg-card);
+        }
+
+        .image-modal-title {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+        }
+
+        .image-modal-controls {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .image-modal-btn {
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            width: 32px;
+            height: 32px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .image-modal-btn:hover {
+            color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .image-modal-btn.image-modal-close {
+            font-size: 0.95rem;
+        }
+
+        .image-modal-btn.image-modal-close:hover {
+            color: #ef4444;
+            border-color: #ef4444;
+        }
+
+        .image-modal-body {
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: grab;
+            position: relative;
+            background: var(--table-header-bg);
+            user-select: none;
+        }
+
+        .image-modal-body.grabbing {
+            cursor: grabbing;
+        }
+
+        #image-modal-canvas {
+            transform-origin: center center;
+            transition: transform 0.05s ease-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        #image-modal-canvas img {
+            max-width: 92vw;
+            max-height: 82vh;
+            object-fit: contain;
+            display: block;
+            border-radius: 4px;
+        }
+
+        .image-modal-footer {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            text-align: center;
+            padding: 6px 12px;
+            background: var(--table-header-bg);
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* SharePoint Sandboxed Notice */
+        .sharepoint-notice {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            margin: 8px 12px 4px 12px;
+            background: rgba(245, 158, 11, 0.12);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 6px;
+            font-size: 0.76rem;
+            color: #b45309;
+            line-height: 1.4;
+        }
+
+        :root[data-theme="dark"] .sharepoint-notice,
+        html[data-theme="dark"] .sharepoint-notice,
+        body[data-theme="dark"] .sharepoint-notice {
+            background: rgba(245, 158, 11, 0.15);
+            border-color: rgba(245, 158, 11, 0.4);
+            color: #fcd34d;
+        }
+
+        .mermaid-container:has(svg) .sharepoint-notice,
+        .mermaid-container.rendered .sharepoint-notice {
+            display: none !important;
+        }
+
+        .sharepoint-footer-hint {
+            margin-top: 1.25rem;
+            padding: 0.75rem 1rem;
+            background: var(--border-subtle);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.76rem;
+            color: var(--text-muted);
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        /* Mermaid Containers & Lightbox */
+        .mermaid-container {
+            position: relative;
+            margin: 2rem 0;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px -2px rgba(0, 0, 0, 0.04);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .mermaid-container:hover {
+            border-color: var(--accent);
+            box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.08);
+        }
+
+        .mermaid-toolbar {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            z-index: 5;
+            opacity: 0.75;
+            transition: opacity 0.2s ease;
+        }
+
+        .mermaid-container:hover .mermaid-toolbar {
+            opacity: 1;
+        }
+
+        .mermaid-expand-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--bg-card, #ffffff);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 5px 10px;
+            font-size: 0.75rem;
+            font-family: inherit;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            transition: all 0.15s ease;
+        }
+
+        .mermaid-expand-btn:hover {
+            color: var(--accent);
+            border-color: var(--accent);
+            transform: translateY(-1px);
+        }
+
+        .mermaid {
+            padding: 1.75rem 1rem 1.25rem 1rem;
+            overflow-x: auto;
+            display: flex;
+            justify-content: center;
+            background: #ffffff;
+        }
+
+        .mermaid svg {
+            max-width: 100%;
+            height: auto;
+            min-width: 280px;
+            box-sizing: border-box;
+        }
+
+        /* Mermaid Modal Overlay */
+        .mermaid-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            box-sizing: border-box;
+        }
+
+        .mermaid-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mermaid-modal-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.45);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .mermaid-modal-content {
+            position: relative;
+            z-index: 2;
+            width: 95vw;
+            max-width: 1600px;
+            height: 92vh;
+            background: var(--bg-card, #ffffff);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.18);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .mermaid-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--bg-card, #ffffff);
+        }
+
+        .mermaid-modal-title {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+        }
+
+        .mermaid-modal-controls {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .mermaid-modal-btn {
+            background: var(--bg-card, #ffffff);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            width: 32px;
+            height: 32px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .mermaid-modal-btn:hover {
+            color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .mermaid-modal-btn.mermaid-modal-close:hover {
+            color: #ef4444;
+            border-color: #ef4444;
+        }
+
+        .mermaid-modal-body {
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: grab;
+            position: relative;
+            background: #ffffff;
+            user-select: none;
+        }
+
+        .mermaid-modal-body.grabbing {
+            cursor: grabbing;
+        }
+
+        #mermaid-modal-canvas {
+            transform-origin: center center;
+            transition: transform 0.05s ease-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        #mermaid-modal-canvas svg {
+            width: 100% !important;
+            height: 100% !important;
+            max-width: 92vw !important;
+            max-height: 82vh !important;
+            object-fit: contain;
+            display: block;
+        }
+
+        .mermaid-modal-hint {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            text-align: center;
+            padding: 6px 12px;
+            background: var(--bg-primary);
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Document-Foundry Approved 3-Column Footer Protocol */
+        .document-footer {
+            margin-top: 3.5rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            gap: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .footer-left {
+            text-align: left;
+        }
+
+        .footer-author {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .footer-tagline {
+            font-style: italic;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            margin-bottom: 6px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .social-icon {
+            width: 15px;
+            height: 15px;
+            fill: var(--text-muted);
+            transition: fill 0.2s ease, transform 0.2s ease;
+        }
+
+        .social-links a:hover .social-icon {
+            fill: var(--accent);
+            transform: translateY(-1px);
+        }
+
+        .footer-center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .footer-logo {
+            height: 38px;
+            width: auto;
+            opacity: 0.9;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .footer-logo:hover {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+
+        .footer-right {
+            text-align: right;
+        }
+
+        .footer-brand {
+            color: var(--text-primary);
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .footer-generated {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 640px) {
+            .document-footer {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 1.25rem;
+            }
+            .footer-left, .footer-right {
+                text-align: center;
+            }
+            .social-links {
+                justify-content: center;
+            }
+        }
+
+        @media print {
+            body {
+                background: #ffffff !important;
+                color: #000000 !important;
+                padding: 0 !important;
+            }
+            .document-card {
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                max-width: 100% !important;
+                background: #ffffff !important;
+            }
+            .quick-actions-bar,
+            .mermaid-toolbar,
+            .table-toolbar-actions,
+            .table-modal,
+            .mermaid-modal,
+            .image-modal,
+            .sharepoint-notice,
+            .sharepoint-footer-hint {
+                display: none !important;
+            }
+            .table-responsive {
+                overflow: visible !important;
+            }
+            .table-responsive table {
+                width: 100% !important;
+                page-break-inside: auto;
+            }
+            .mermaid-container {
+                background: #ffffff !important;
+                border: 1px solid #cbd5e1 !important;
+                box-shadow: none !important;
+                page-break-inside: avoid;
+            }
+            .table-container {
+                border: 1px solid #cbd5e1 !important;
+                box-shadow: none !important;
+                page-break-inside: auto;
+            }
+            .document-content pre {
+                background: #ffffff !important;
+                border: 1px solid #cbd5e1 !important;
+                page-break-inside: avoid;
+            }
+            .document-content pre code {
+                color: #0f172a !important;
+            }
+            .math-display {
+                background: #ffffff !important;
+                border: 1px solid #cbd5e1 !important;
+                page-break-inside: avoid;
+            }
+            tr {
+                page-break-inside: avoid;
+                page-break-after: auto;
+            }
+            a {
+                text-decoration: none !important;
+                color: inherit !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="document-wrapper">
+        <main class="document-card">
+            
+        <header class="document-header">
+            <div class="header-top-row">
+                <div class="header-brand-title">
+                    <h1 class="document-title">Beyond the Handheld: A Practical Tactical Mesh White Paper</h1>
+                </div>
+                
+        <div class="quick-actions-bar">
+            <button type="button" class="quick-action-btn" id="btn-theme-toggle" title="Toggle Light/Dark Theme" aria-label="Toggle Theme">
+                <svg class="theme-icon-sun" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                <svg class="theme-icon-moon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                <span id="theme-btn-label">Theme</span>
+            </button>
+            <button type="button" class="quick-action-btn" id="btn-print" title="Print Document or Save as PDF" aria-label="Print or Save as PDF">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                <span>Print / PDF</span>
+            </button>
+            <button type="button" class="quick-action-btn" id="btn-download" title="Download Standalone HTML File" aria-label="Download HTML">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                <span>Download HTML</span>
+            </button>
+        </div>
+        
+            </div>
+            
+        <div class="header-meta">
+            <span class="header-subtitle">Tactical Communications &amp; Mesh Architecture Field Notes</span>
+            <span class="header-author">By Michael L. Jackson</span>
+            <span class="header-attribution">Network-Foundry &amp; PBX-Foundry</span>
+            <span class="header-date">October 16, 2026</span>
+        </div>
+        
+        </header>
+        
+            <nav class="compact-toc">
+  <div class="toc-header">Table of Contents</div>
+  <ul>
+    <li class="toc-h2"><a href="#heading-1-executive-summary-amp-elmer-s-note">Executive Summary &amp; Elmer’s Note</a></li>
+    <li class="toc-h2"><a href="#heading-2-1-the-core-philosophy-layered-communications-defense-in-depth">1. The Core Philosophy: Layered Communications (Defense in Depth)</a></li>
+    <li class="toc-h2"><a href="#heading-3-2-tier-1-the-lora-amp-meshtastic-discovery-the-silent-backbone">2. Tier 1: The LoRa &amp; Meshtastic Discovery (The Silent Backbone)</a></li>
+    <li class="toc-h3"><a href="#heading-4-why-915-mhz-ism-matters-for-community-events">Why 915 MHz ISM Matters for Community Events</a></li>
+    <li class="toc-h3"><a href="#heading-5-the-cryptographic-channel-hierarchy">The Cryptographic Channel Hierarchy</a></li>
+    <li class="toc-h3"><a href="#heading-6-smart-position-eliminating-voice-location-check-ins">Smart Position: Eliminating Voice Location Check-Ins</a></li>
+    <li class="toc-h3"><a href="#heading-7-the-hardware-fleet">The Hardware Fleet</a></li>
+    <li class="toc-h2"><a href="#heading-8-3-tier-2-the-12v-wi-fi-intranet-deployable-high-bandwidth-bubble">3. Tier 2: The 12V Wi-Fi Intranet (Deployable High-Bandwidth Bubble)</a></li>
+    <li class="toc-h3"><a href="#heading-9-why-repurposed-linksys-wrt-routers">Why Repurposed Linksys WRT Routers?</a></li>
+    <li class="toc-h2"><a href="#heading-10-4-tier-3-pbx-foundry-tactical-voip-amp-ephemeral-byod-softphones">4. Tier 3: PBX-Foundry (Tactical VoIP &amp; Ephemeral BYOD Softphones)</a></li>
+    <li class="toc-h3"><a href="#heading-11-the-problem-it-solves">The Problem It Solves</a></li>
+    <li class="toc-h3"><a href="#heading-12-how-pbx-foundry-works">How PBX-Foundry Works</a></li>
+    <li class="toc-h3"><a href="#heading-13-key-operational-features">Key Operational Features:</a></li>
+    <li class="toc-h2"><a href="#heading-14-5-a-realistic-scenario-putting-the-multi-tier-mesh-into-action">5. A Realistic Scenario: Putting the Multi-Tier Mesh into Action</a></li>
+    <li class="toc-h2"><a href="#heading-15-6-what-we-learned-field-lessons-amp-practical-advice">6. What We Learned: Field Lessons &amp; Practical Advice</a></li>
+    <li class="toc-h3"><a href="#heading-16-1-protobufs-and-automation-beat-manual-phone-taps">1. Protobufs and Automation Beat Manual Phone Taps</a></li>
+    <li class="toc-h3"><a href="#heading-17-2-pay-attention-to-node-roles">2. Pay Attention to Node Roles</a></li>
+    <li class="toc-h3"><a href="#heading-18-3-native-12v-dc-is-a-superpower">3. Native 12V DC is a Superpower</a></li>
+    <li class="toc-h2"><a href="#heading-19-7-an-invitation-to-experiment">7. An Invitation to Experiment</a></li>
+  </ul>
+</nav>
+            <article class="document-content">
+                <h1>Beyond the Handheld: A Practical Journey Integrating LoRa, 12V Wi-Fi Mesh, and Tactical VoIP Alongside Ham Radio</h1>
+<p><strong>Field Notes, Architecture, and Lessons from Network &amp; PBX Foundry for Community Events and Emergency Operations</strong></p>
+<p><em>Author: Michael Jackson</em><br>
+<em>Date: October 2026</em><br>
+<em>Project: Network-Foundry / PBX-Foundry</em><br>
+<em>Target Audience: Amateur Radio Operators, Community Event Volunteers, and Emergency Comms Teams</em></p>
+<hr>
+<h2 id="heading-1-executive-summary-amp-elmer-s-note">Executive Summary &amp; Elmer’s Note</h2>
+<p>For decades, amateur radio operators have been the backbone of community public-service communications. Whether staffing water stops along a marathon, tracking floats in a town parade, or standing watch during severe weather activations, our default reflex is predictable and time-honored: <strong>grab a 2-meter handheld, dial into the local repeater, and establish a voice directed net.</strong></p>
+<p>Analog FM voice on VHF and UHF is simple, robust, and familiar. But anyone who has managed net control during a fast-moving community event has experienced the friction points:</p>
+<ul>
+<li><strong>Channel Congestion:</strong> Reading 10-character GPS coordinates, medical triage notes, or 6-item supply requests over voice ties up the repeater for 45 to 60 seconds at a time while urgent traffic queues up.</li>
+<li><strong>The Non-Ham Volunteer Gap:</strong> Event marshals, medical staff, Red Cross volunteers, and municipal coordinators who do not hold an FCC amateur license cannot legally transmit on our frequencies, forcing clumsy phone-to-radio relay handoffs.</li>
+<li><strong>Pen-and-Paper Inefficiencies:</strong> Incident commanders squinting at handwritten paper rosters taped to a folding table, trying to track where 15 mobile volunteers are positioned on foot or in vehicles.</li>
+</ul>
+<p>Over the last several weeks in our local workshop and field test runs—what we’ve termed <strong>Network-Foundry</strong> and <strong>PBX-Foundry</strong>—we set out on a hands-on journey to explore a practical question:</p>
+<blockquote>
+<p><em>Can we build a deployable, resilient, multi-tier communications capability that offloads routine data and volunteer voice traffic to mature digital technologies, while preserving our amateur radio repeaters for high-priority command and wide-area traffic?</em></p>
+</blockquote>
+<p>The answer is an emphatic <strong>yes</strong>. This paper outlines the journey we followed, the hardware we tested in our vehicles and on foot, the architectural tiers that emerged, and why we believe these tools are now mature, reliable, and ready for real-world community service.</p>
+<hr>
+<h2 id="heading-2-1-the-core-philosophy-layered-communications-defense-in-depth">1. The Core Philosophy: Layered Communications (Defense in Depth)</h2>
+<p>We did not embark on this project to replace amateur radio. Amateur radio remains our strategic macro-layer: it connects our town to county EOCs, state networks, Skywarn, and distant repeaters without dependence on commercial infrastructure.</p>
+<p>Instead, our goal was <strong>traffic offloading and operational clarity</strong>. When you analyze an afternoon of community event traffic, it naturally divides into four distinct categories:</p>
+<ol>
+<li><strong>Autonomous Telemetry &amp; Beaconing:</strong> <em>“Where is the scout truck right now? What is the battery voltage on the ridge relay?”</em> (Machines should send this silently, not humans speaking over voice).</li>
+<li><strong>Short Tactical SITREPs &amp; Logistics Queries:</strong> <em>“Water Station 3 is down to 2 pallets of cups.”</em> (A 5-word digital text is faster, silent, and leaves a persistent audit log on the screen).</li>
+<li><strong>Private, High-Context Coordination:</strong> <em>“We have a runner with heat distress at Mile 4 who needs a confidential medical assessment before dispatching an ambulance.”</em> (This should never tie up an open repeater, nor should sensitive medical details be broadcast over public analog frequencies).</li>
+<li><strong>Strategic Command &amp; Inter-Agency Voice:</strong> <em>“Incident Commander to County Dispatch: Requesting one mutual aid ambulance to Sector 2.”</em> (This is the rightful home of our VHF/UHF tactical voice nets).</li>
+</ol>
+<p>To serve these distinct needs, a <strong>Tri-Tier Communications Architecture</strong> emerged:</p>
+<div class="mermaid-container">
+    <div class="mermaid-toolbar">
+        <button type="button" class="mermaid-expand-btn" title="Pop out diagram" aria-label="Pop out diagram">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+            <span>Pop Out</span>
+        </button>
+    </div>
+    <div class="sharepoint-notice">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span><strong>SharePoint Preview Notice:</strong> Diagram scripts are sandboxed in SharePoint web view. Click <strong>Download HTML</strong> above to view full rendered diagrams in your browser.</span>
+    </div>
+    <div class="mermaid">
+graph TD
+    subgraph Tier4["Tier 4: Strategic Macro Voice"]
+        H1["Amateur Radio Repeaters (2m / 70cm)"]
+        H2["HF NVIS / Winlink Emergency Net"]
+    end
+
+    subgraph Tier3["Tier 3: Tactical Voice & Coordination"]
+        P1["PBX-Foundry / Asterisk VoIP Server"]
+        P2["BYOD Smartphones / Linphone Softphones"]
+        P3["Full-Duplex Encrypted Intercom & Ring Groups"]
+    end
+
+    subgraph Tier2["Tier 2: High-Speed Tactical IP Bubble"]
+        W1["Linksys WRT Dual-Band Gigabit Mesh"]
+        W2["12V Battery / Auxiliary Vehicle DC Power"]
+        W3["Local Web Map Dashboard, Forms, & File Share"]
+    end
+
+    subgraph Tier1["Tier 1: Silent Digital Sensor & Text Mesh"]
+        M1["Meshtastic / LoRa 915 MHz ISM Fleet"]
+        M2["Autonomous Smart Position GPS Tracking"]
+        M3["Multi-Channel Encrypted Text & Battery Telemetry"]
+    end
+
+    M1 --- W1
+    W1 --- P1
+    P1 --- H1
+    </div>
+</div>
+<hr>
+<h2 id="heading-3-2-tier-1-the-lora-amp-meshtastic-discovery-the-silent-backbone">2. Tier 1: The LoRa &amp; Meshtastic Discovery (The Silent Backbone)</h2>
+<p>Our first major milestone was deploying <strong>Meshtastic on 915 MHz ISM LoRa</strong>. While many hams know LoRa as a low-baud digital modulation, Meshtastic wraps it in an autonomous, decentralized packet-mesh protocol with zero single points of failure.</p>
+<h3 id="heading-4-why-915-mhz-ism-matters-for-community-events">Why 915 MHz ISM Matters for Community Events</h3>
+<p>Because 915 MHz ISM is license-free under FCC Part 15, non-ham volunteers—CERT members, race organizers, scout leaders—can carry handheld nodes and exchange text messages or broadcast their locations legally. Furthermore, unlike amateur bands where encryption is strictly prohibited, Part 15 ISM allows full <strong>AES-256 cryptographic segmentation</strong>.</p>
+<h3 id="heading-5-the-cryptographic-channel-hierarchy">The Cryptographic Channel Hierarchy</h3>
+<p>Rather than dumping all traffic onto one noisy public channel, we implemented a standardized 6-channel hierarchy across our fleet:</p>
+<div class="table-container" id="table-container-df-table-1">
+    <div class="table-toolbar">
+        <span class="table-toolbar-title">
+            <svg class="table-toolbar-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg>
+            <span>Data Table 1</span>
+        </span>
+        <div class="table-toolbar-actions">
+            <button type="button" class="table-action-btn table-copy-btn" data-target="table-container-df-table-1" title="Copy Table as CSV">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <span>Copy CSV</span>
+            </button>
+            <button type="button" class="table-action-btn table-expand-btn" data-target="table-container-df-table-1" title="Expand Table Fullscreen">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+                <span>Pop Out</span>
+            </button>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table>
+<thead>
+<tr>
+<th style="text-align:center">Channel Index</th>
+<th style="text-align:left">Channel Name</th>
+<th style="text-align:center">Role</th>
+<th style="text-align:center">Encryption</th>
+<th style="text-align:left">Operational Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>0</strong></td>
+<td style="text-align:left"><code>Primary</code></td>
+<td style="text-align:center">PRIMARY</td>
+<td style="text-align:center">Public Default (<code>AQ==</code>)</td>
+<td style="text-align:left">Volunteer check-in and general community interop</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>1</strong></td>
+<td style="text-align:left"><code>CMD-EOC</code></td>
+<td style="text-align:center">SECONDARY</td>
+<td style="text-align:center">AES-256</td>
+<td style="text-align:left">Incident Command, TOC staff, and sensitive command SITREPs</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>2</strong></td>
+<td style="text-align:left"><code>OPS-TEAMS</code></td>
+<td style="text-align:center">SECONDARY</td>
+<td style="text-align:center">AES-256</td>
+<td style="text-align:left">Search parties, roving patrols, and perimeter security</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>3</strong></td>
+<td style="text-align:left"><code>LOG-MED</code></td>
+<td style="text-align:center">SECONDARY</td>
+<td style="text-align:center">AES-256</td>
+<td style="text-align:left">Medical triage, transport dispatch, and supply requests</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>4</strong></td>
+<td style="text-align:left"><code>SYS-TELEM</code></td>
+<td style="text-align:center">SECONDARY</td>
+<td style="text-align:center">AES-256</td>
+<td style="text-align:left">Automated battery voltages, solar metrics, and sensor reports</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>5</strong></td>
+<td style="text-align:left"><code>ADMIN</code></td>
+<td style="text-align:center">SECONDARY</td>
+<td style="text-align:center">AES-256</td>
+<td style="text-align:left">Cryptographic remote Over-The-Air (OTA) maintenance</td>
+</tr>
+</tbody>
+</table>
+    </div>
+</div>
+<h3 id="heading-6-smart-position-eliminating-voice-location-check-ins">Smart Position: Eliminating Voice Location Check-Ins</h3>
+<p>One of our biggest “aha!” moments during field testing came when walking the perimeter with our pocket node (<code>XIA2</code>).</p>
+<p>Traditionally, a net control operator spends half their time asking: <em>“Scout 1, report your location.”</em> The operator stops, checks a landmark, clicks PTT, and speaks.</p>
+<p>With Meshtastic’s <strong>Smart Position</strong> algorithm enabled (<code>broadcast_smart_minimum_distance = 50m</code>, <code>broadcast_smart_minimum_interval = 30s</code>):</p>
+<ul>
+<li>While the operator is stationary at their post, the radio stays silent, saving battery and airtime.</li>
+<li>As soon as the operator begins walking and crosses 50 meters from their last fix, the node automatically broadcasts an updated GPS packet over the mesh.</li>
+<li>Net control’s computer receives the packet and instantly moves the operator’s icon across the live web map. <strong>Zero voice airtime consumed.</strong></li>
+</ul>
+<div class="mermaid-container">
+    <div class="mermaid-toolbar">
+        <button type="button" class="mermaid-expand-btn" title="Pop out diagram" aria-label="Pop out diagram">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+            <span>Pop Out</span>
+        </button>
+    </div>
+    <div class="sharepoint-notice">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span><strong>SharePoint Preview Notice:</strong> Diagram scripts are sandboxed in SharePoint web view. Click <strong>Download HTML</strong> above to view full rendered diagrams in your browser.</span>
+    </div>
+    <div class="mermaid">
+sequenceDiagram
+    autonumber
+    actor Volunteer as Field Operator (XIA2)
+    participant Node as LoRa Node (915 MHz)
+    participant Mesh as Tactical Repeater (M200, M202)
+    participant TOC as Net Control (M801)
+
+    Note over Volunteer,Node: Operator stationary at checkpoint
+    Volunteer->>Node: Phone injects Bluetooth GPS fix
+    Note over Node: Distance delta under 50m: Radio stays silent
+
+    Note over Volunteer,Node: Operator leaves checkpoint on foot
+    Volunteer->>Volunteer: Walks 60 meters down perimeter
+    Note over Node: Distance delta exceeds 50m threshold: Trigger broadcast
+    Node->>Mesh: Broadcast Encrypted Location Packet (LoRa LongFast)
+    Mesh->>TOC: Hop 1 Relay to Command Post
+    Note over TOC: Marker on Leaflet Tactical Map updates dynamically
+    </div>
+</div>
+<h3 id="heading-7-the-hardware-fleet">The Hardware Fleet</h3>
+<p>We built and standardized our fleet using three accessible, affordable hardware classes:</p>
+<ul>
+<li><strong>Seeed Studio XIAO ESP32-S3:</strong> Ultra-compact pocket/vehicle EDC nodes (<code>XIA1</code>, <code>XIA2</code>). Paired with a smartphone over BLE, the phone acts as the GPS source, screen, and keyboard.</li>
+<li><strong>RAK Wireless RAK4631 (WisBlock nRF52840):</strong> Ultra-low-power backbone nodes (<code>M200</code>, <code>M201</code>, <code>M202</code>). Capable of running for weeks on small solar panels or months on modest battery packs, these act as hilltop and ridge repeaters.</li>
+<li><strong>Heltec V3 / V4 Handhelds:</strong> Screen-equipped, all-in-one portable communicators (<code>M101</code> through <code>M106</code>) with integrated displays, ideal for roving field volunteers.</li>
+</ul>
+<hr>
+<h2 id="heading-8-3-tier-2-the-12v-wi-fi-intranet-deployable-high-bandwidth-bubble">3. Tier 2: The 12V Wi-Fi Intranet (Deployable High-Bandwidth Bubble)</h2>
+<p>While LoRa is unmatched for low-power, kilometer-range text and telemetry, it has virtually zero bandwidth (measured in bits per second). When net control needs to display a live topographical map, review digital registration rosters, or share event logistics documents, an IP network is essential.</p>
+<p>Rather than relying on commercial cellular hotspots (which frequently congest or fail during large crowds and severe weather), we turned to a battle-tested piece of surplus hardware: <strong>the Linksys WRT dual-band gigabit router series</strong> (WRT1200AC, WRT1900AC, WRT3200ACM).</p>
+<div class="mermaid-container">
+    <div class="mermaid-toolbar">
+        <button type="button" class="mermaid-expand-btn" title="Pop out diagram" aria-label="Pop out diagram">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+            <span>Pop Out</span>
+        </button>
+    </div>
+    <div class="sharepoint-notice">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span><strong>SharePoint Preview Notice:</strong> Diagram scripts are sandboxed in SharePoint web view. Click <strong>Download HTML</strong> above to view full rendered diagrams in your browser.</span>
+    </div>
+    <div class="mermaid">
+graph LR
+    subgraph PowerSource["Auxiliary Power"]
+        BAT["12V LiFePO4 Battery or Vehicle Aux Port"]
+    end
+
+    subgraph RouterCore["Linksys WRT Gigabit Architecture"]
+        WRT["Linksys WRT3200ACM / 1900AC"]
+        VLAN10["VLAN 10: Management"]
+        VLAN20["VLAN 20: Tactical Operations"]
+        VLAN30["VLAN 30: BYOD Public Volunteer"]
+    end
+
+    subgraph FieldServices["Local Field Intranet Bubble"]
+        MAP["Offline Tactical Leaflet Web Map"]
+        ROSTER["Incident Roster & Digital Forms"]
+        PBX_APP["PBX-Foundry SIP Server"]
+    end
+
+    BAT -->|Native 12V DC Input| WRT
+    WRT --> VLAN10
+    WRT --> VLAN20
+    WRT --> VLAN30
+    VLAN20 --> MAP
+    VLAN20 --> ROSTER
+    VLAN20 --> PBX_APP
+    </div>
+</div>
+<h3 id="heading-9-why-repurposed-linksys-wrt-routers">Why Repurposed Linksys WRT Routers?</h3>
+<ol>
+<li><strong>Native 12V DC Operation:</strong> The barrel jack on standard Linksys WRT routers runs directly off 12V DC. By soldering standard automotive auxiliary plugs and Anderson Powerpole connectors, we eliminated inefficient DC-to-AC inverters. A single 12V 20Ah LiFePO4 battery powers an entire multi-band tactical access point and switch for over 24 hours.</li>
+<li><strong>High-Power RF &amp; Removable Antennas:</strong> With RP-SMA connectors, stock antennas can be swapped for high-gain magnetic vehicle mounts or elevated masts, blanketing an entire staging field or parking pavilion.</li>
+<li><strong>Local Intranet Services:</strong> Connected to a low-draw Linux laptop or thin client at the command post, the Wi-Fi network serves:
+<ul>
+<li>Real-time tactical maps showing live Meshtastic node positions.</li>
+<li>Shared digital incident logs.</li>
+<li>Local documentation and emergency action plans accessible by any volunteer connected to the Wi-Fi.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="heading-10-4-tier-3-pbx-foundry-tactical-voip-amp-ephemeral-byod-softphones">4. Tier 3: PBX-Foundry (Tactical VoIP &amp; Ephemeral BYOD Softphones)</h2>
+<p>The most intriguing capability to emerge from our workshop over the past week was <strong>PBX-Foundry</strong>: bringing private, full-duplex voice dispatch to the field without touching radio frequencies.</p>
+<h3 id="heading-11-the-problem-it-solves">The Problem It Solves</h3>
+<p>Consider a typical 10K road race. At the finish line, the medical director needs to speak with the head triage nurse at the medical tent. If they use the main ham net, every runner tracking call is paused while they discuss an athlete’s condition. If they use commercial cell phones, spotty cell service or dead zones often block the call.</p>
+<h3 id="heading-12-how-pbx-foundry-works">How PBX-Foundry Works</h3>
+<p>Inside our 12V Wi-Fi bubble, we spin up a lightweight, containerized <strong>Asterisk / PJSIP micro-PBX</strong> on a workstation or mini-PC:</p>
+<div class="mermaid-container">
+    <div class="mermaid-toolbar">
+        <button type="button" class="mermaid-expand-btn" title="Pop out diagram" aria-label="Pop out diagram">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+            <span>Pop Out</span>
+        </button>
+    </div>
+    <div class="sharepoint-notice">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span><strong>SharePoint Preview Notice:</strong> Diagram scripts are sandboxed in SharePoint web view. Click <strong>Download HTML</strong> above to view full rendered diagrams in your browser.</span>
+    </div>
+    <div class="mermaid">
+sequenceDiagram
+    autonumber
+    actor Volunteer as Volunteer (Medical)
+    participant Phone as Smartphone (BYOD)
+    participant QR as Welcome Portal (QR)
+    participant PBX as PBX-Foundry (Asterisk)
+    actor Command as Incident Commander
+
+    Volunteer->>QR: Scans Staging Extension QR Code
+    QR->>Phone: Pushes Auto-Config XML (Linphone App)
+    Phone->>PBX: Instant SIP Registration via Local Wi-Fi (Ext 201)
+    Note over Phone,PBX: Full-Duplex Encrypted Opus Voice Established
+    
+    Volunteer->>Phone: Dials 101 (Command Post)
+    Phone->>PBX: PJSIP Session Request
+    PBX->>Command: Rings Extension 101 (TOC Porch)
+    Command->>Volunteer: Private, crystal-clear duplex voice call
+    Note over Volunteer,Command: Zero RF repeater airtime consumed!
+    </div>
+</div>
+<h3 id="heading-13-key-operational-features">Key Operational Features:</h3>
+<ul>
+<li><strong>Ephemeral BYOD Provisioning:</strong> Volunteers download a free SIP client (like Linphone) to their personal iPhone or Android. At the morning briefing, they scan a printed QR code at the registration table. Within seconds, their personal phone is provisioned as an authenticated, temporary extension (e.g., <code>Ext 201: Medical Triage</code>, <code>Ext 301: Water Station Lead</code>).</li>
+<li><strong>Tactical Ring Groups &amp; Intercom:</strong> Net control can dial <code>*800</code> to ring all medical staff simultaneously, or dial a single extension for a quiet, one-on-one coordination conversation.</li>
+<li><strong>Crystal-Clear Full Duplex:</strong> Using modern wideband audio codecs (like Opus), audio quality is telephone-grade or better, completely immune to RF static, picket-fencing, or repeater squelch tails.</li>
+</ul>
+<hr>
+<h2 id="heading-14-5-a-realistic-scenario-putting-the-multi-tier-mesh-into-action">5. A Realistic Scenario: Putting the Multi-Tier Mesh into Action</h2>
+<p>To see how these pieces fit together smoothly in real life, consider a simulated community event (such as a multi-mile community trail run or fair):</p>
+<div class="mermaid-container">
+    <div class="mermaid-toolbar">
+        <button type="button" class="mermaid-expand-btn" title="Pop out diagram" aria-label="Pop out diagram">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+            <span>Pop Out</span>
+        </button>
+    </div>
+    <div class="sharepoint-notice">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span><strong>SharePoint Preview Notice:</strong> Diagram scripts are sandboxed in SharePoint web view. Click <strong>Download HTML</strong> above to view full rendered diagrams in your browser.</span>
+    </div>
+    <div class="mermaid">
+graph TD
+    subgraph StagingGrounds["Incident Staging & Command TOC"]
+        TOC_M801["Porch Master Anchor: M801"]
+        TOC_WIFI["12V Linksys WRT Wi-Fi Bubble"]
+        TOC_PBX["PBX-Foundry Asterisk Server"]
+        TOC_HAM["VHF/UHF Base Station & Net Control"]
+    end
+
+    subgraph FieldOps["Mobile & Field Deployments"]
+        SCOUT["Scout Truck: XIA2 LoRa Router"]
+        RIDGE["Bellows Ridge Backbone: M202 LoRa Router"]
+        VOL1["Trail Marshal: M101 Heltec Handheld"]
+        MED["Medical Tent: Linphone Softphone Ext 201"]
+    end
+
+    subgraph RegionalLink["Strategic External Comms"]
+        HAM_NET["County EOC / Town Dispatch / Weather Net"]
+    end
+
+    VOL1 -.->|LoRa Smart Position| RIDGE
+    RIDGE -.->|LoRa 915 MHz Packet| TOC_M801
+    SCOUT -.->|Mobile LoRa GPS Relay| TOC_M801
+
+    TOC_M801 -->|Telemetry Feed| TOC_WIFI
+    MED ---|Local Wi-Fi VoIP Call| TOC_PBX
+    TOC_PBX ---|Duplex Softphone Ext 101| TOC_WIFI
+
+    TOC_HAM ---|2m/70cm Analog Voice| HAM_NET
+    </div>
+</div>
+<ol>
+<li><strong>Continuous Situational Awareness:</strong> The trail marshal (<code>M101</code>) and the roving scout vehicle (<code>XIA2</code>) move along the course. Their radios silently transmit coordinates every 50 meters. Net control watches their icons progress across a map in real time. <strong>Zero voice calls made.</strong></li>
+<li><strong>Medical Coordination:</strong> An injured runner arrives at the medical tent. The triage nurse picks up her smartphone, connected to the local staging Wi-Fi, and dials extension <code>101</code>. She speaks in full duplex with the medical director about patient transport, keeping confidential health information off the public radio waves.</li>
+<li><strong>Command Decision:</strong> The incident commander decides that municipal mutual aid is required. The ham net control operator picks up the 2-meter microphone and contacts the regional town dispatcher on the local 146.52 simplex or regional repeater. <strong>The ham repeater is completely quiet, clear, and instantly available for the priority call.</strong></li>
+</ol>
+<p>Every tier did precisely what it was designed to do, without competing for bandwidth or stepping on other operators.</p>
+<hr>
+<h2 id="heading-15-6-what-we-learned-field-lessons-amp-practical-advice">6. What We Learned: Field Lessons &amp; Practical Advice</h2>
+<p>Throughout our testing, configuring, and field troubleshooting, several valuable lessons emerged:</p>
+<h3 id="heading-16-1-protobufs-and-automation-beat-manual-phone-taps">1. Protobufs and Automation Beat Manual Phone Taps</h3>
+<p>Configuring 10 or 15 radios manually using a smartphone app takes hours and invites configuration drift (e.g., mismatched channel keys or typoed admin keys). Writing small Python helper scripts to query the radios over USB and write binary protobuf configurations allowed us to audit, re-key, and verify a radio in under 10 seconds.</p>
+<h3 id="heading-17-2-pay-attention-to-node-roles">2. Pay Attention to Node Roles</h3>
+<p>In Meshtastic, not every node should be a <code>ROUTER</code>. If multiple handhelds on the ground are set to repeat packets indiscriminately, they can cause channel contention. Setting handhelds to <code>CLIENT</code> or <code>CLIENT_MUTE</code> and reserving <code>ROUTER</code> or <code>ROUTER_CLIENT</code> status for elevated, permanent anchors (like <code>M200</code> on the ridge or <code>M801</code> at the TOC) keeps channel utilization pristine.</p>
+<h3 id="heading-18-3-native-12v-dc-is-a-superpower">3. Native 12V DC is a Superpower</h3>
+<p>Eliminating inverters across our network gear lowered our idle power draw dramatically, eliminated RF hash and switching noise on the ham bands, and made our gear plug-and-play with common emergency power sources (Anderson Powerpoles, deep-cycle marine batteries, and solar charge controllers).</p>
+<hr>
+<h2 id="heading-19-7-an-invitation-to-experiment">7. An Invitation to Experiment</h2>
+<p>Amateur radio has never been about standing still. From spark gap to AM, from single sideband to packet radio, APRS, and DMR, the amateur service has always led the exploration of what is possible on the airwaves.</p>
+<p>The concepts we’ve shared here are not theoretical laboratory prototypes. They are built from accessible, commercial-off-the-shelf boards costing between $25 and $60, surplus gigabit routers readily found online or in workshops, and open-source software maintained by active, dedicated communities.</p>
+<p>We share this journey not as an end point, but as an open invitation:</p>
+<ul>
+<li><strong>Curious about how a LoRa mesh behaves across our town’s terrain?</strong> Let’s stage a ridge test.</li>
+<li><strong>Want to test a portable Wi-Fi bubble at our next club meeting or public event?</strong> We have the 12V harnesses ready.</li>
+<li><strong>Want to see a softphone extension ring from a handheld smartphone off-grid?</strong> We’ll demonstrate it live.</li>
+</ul>
+<p>If any part of this journey sparks your curiosity, let’s get together, share ideas, and build the next layer of community communication capability together.</p>
+<hr>
+<p><em>73,</em><br>
+<strong>Michael Jackson</strong><br>
+<em>Network-Foundry &amp; PBX-Foundry Project</em><br>
+<em>Carlisle, MA</em></p>
+
+            </article>
+            
+        <footer class="document-footer">
+            <div class="footer-left">
+                <p class="footer-author">Michael L. Jackson</p>
+                <p class="footer-tagline">Building systems that think.</p>
+                <div class="social-links">
+                    <a href="https://michaelljackson101.github.io/Share/index.html" aria-label="Website" target="_blank" rel="noopener">
+                        <svg class="social-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                    </a>
+                    <a href="https://github.com/michaelljackson101" aria-label="GitHub" target="_blank" rel="noopener">
+                        <svg class="social-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.379.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.161 22 16.416 22 12c0-5.523-4.477-10-10-10z"/></svg>
+                    </a>
+                    <a href="https://www.linkedin.com/in/michaelljackson/" aria-label="LinkedIn" target="_blank" rel="noopener">
+                        <svg class="social-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-center">
+                <svg class="footer-logo" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 22.6L17.66 16.03L0 9.13V0L30.24 12.18V19.75L0 32V22.6Z" fill="var(--accent)"/>
+                </svg>
+            </div>
+            <div class="footer-right">
+                <p class="footer-brand"><span style="font-weight: 600;">Network-Foundry &amp; PBX-Foundry</span> | <span style="font-weight: 600;">Document-Foundry</span></p>
+                <p class="footer-generated">Generated: October 16, 2026</p>
+            </div>
+        </footer>
+        <div class="sharepoint-footer-hint">
+            <span>💡 <strong>SharePoint Preview Note:</strong> If viewing inside SharePoint's web preview and diagrams or interactive popouts are restricted by sandbox policy, use the <strong>Download HTML</strong> button above to open natively in your browser.</span>
+        </div>
+        
+        </main>
+    </div>
+    
+    <div id="df-table-modal" class="table-modal" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="table-modal-backdrop"></div>
+        <div class="table-modal-content">
+            <div class="table-modal-header">
+                <div class="table-modal-title">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg>
+                    <span id="table-modal-title-text">Table Inspection View</span>
+                </div>
+                <div class="table-modal-controls">
+                    <button type="button" id="table-modal-copy-csv" class="table-modal-btn" title="Copy as CSV">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        <span>Copy CSV</span>
+                    </button>
+                    <button type="button" id="table-modal-copy-md" class="table-modal-btn" title="Copy as Markdown">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                        <span>Copy Markdown</span>
+                    </button>
+                    <button type="button" class="table-modal-btn table-modal-close" id="table-modal-close" title="Close (Esc)">
+                        ✕
+                    </button>
+                </div>
+            </div>
+            <div class="table-modal-body">
+                <div id="table-modal-canvas"></div>
+            </div>
+            <div class="table-modal-footer">
+                <span>Navigate table across viewport • Full text copy & selection • Press <strong>Esc</strong> or click outside to dismiss</span>
+            </div>
+        </div>
+    </div>
+
+    
+    <div id="df-image-modal" class="image-modal" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="image-modal-backdrop"></div>
+        <div class="image-modal-content">
+            <div class="image-modal-header">
+                <div class="image-modal-title">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 6px; display: inline-block; vertical-align: -2px;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                    <span id="image-modal-title-text">Image Inspection View</span>
+                </div>
+                <div class="image-modal-controls">
+                    <button type="button" class="image-modal-btn" id="image-zoom-in" title="Zoom In (+)">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                    </button>
+                    <button type="button" class="image-modal-btn" id="image-zoom-out" title="Zoom Out (-)">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                    </button>
+                    <button type="button" class="image-modal-btn" id="image-zoom-reset" title="Reset View (0)">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                    </button>
+                    <button type="button" class="image-modal-btn" id="image-new-tab" title="Open Image in New Tab">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    </button>
+                    <button type="button" class="image-modal-btn image-modal-close" id="image-modal-close" title="Close (Esc)">✕</button>
+                </div>
+            </div>
+            <div class="image-modal-body" id="image-modal-body">
+                <div id="image-modal-canvas">
+                    <img id="image-modal-img" src="" alt="Inspection">
+                </div>
+            </div>
+            <div class="image-modal-footer">
+                <span>Scroll wheel to zoom • Click and drag to pan • Press <strong>Esc</strong> or click outside to dismiss</span>
+            </div>
+        </div>
+    </div>
+
+    
+    <div id="mermaid-modal" class="mermaid-modal" aria-hidden="true" role="dialog">
+        <div class="mermaid-modal-backdrop"></div>
+        <div class="mermaid-modal-content">
+            <div class="mermaid-modal-header">
+                <div class="mermaid-modal-title">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 6px; display: inline-block; vertical-align: -2px;"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                    <span>Diagram Inspection</span>
+                </div>
+                <div class="mermaid-modal-controls">
+                    <button type="button" class="mermaid-modal-btn" id="mermaid-zoom-in" title="Zoom In (+)">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                    </button>
+                    <button type="button" class="mermaid-modal-btn" id="mermaid-zoom-out" title="Zoom Out (-)">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                    </button>
+                    <button type="button" class="mermaid-modal-btn" id="mermaid-zoom-reset" title="Reset View (0)">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                    </button>
+                    <button type="button" class="mermaid-modal-btn" id="mermaid-new-tab" title="Open Clean SVG in New Tab">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    </button>
+                    <button type="button" class="mermaid-modal-btn mermaid-modal-close" id="mermaid-modal-close" title="Close (Esc)">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="mermaid-modal-body" id="mermaid-modal-body">
+                <div id="mermaid-modal-canvas"></div>
+            </div>
+            <div class="mermaid-modal-hint">
+                <span>Scroll wheel to zoom • Click & drag to pan • Press <strong>Esc</strong> to close</span>
+            </div>
+        </div>
+    </div>
+
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('df-table-modal');
+            if (!modal) return;
+
+            const modalBackdrop = modal.querySelector('.table-modal-backdrop');
+            const modalCloseBtn = document.getElementById('table-modal-close');
+            const modalCanvas = document.getElementById('table-modal-canvas');
+            const modalTitle = document.getElementById('table-modal-title-text');
+            const copyCsvBtn = document.getElementById('table-modal-copy-csv');
+            const copyMdBtn = document.getElementById('table-modal-copy-md');
+            let activeTable = null;
+
+            function openTableModal(tableContainer) {
+                const table = tableContainer.querySelector('table');
+                if (!table) return;
+                activeTable = table;
+
+                const titleEl = tableContainer.querySelector('.table-toolbar-title span');
+                modalTitle.textContent = titleEl ? titleEl.textContent.trim() : 'Table Inspection View';
+
+                modalCanvas.innerHTML = '';
+                const clone = table.cloneNode(true);
+                modalCanvas.appendChild(clone);
+
+                modal.classList.add('active');
+                modal.setAttribute('aria-hidden', 'false');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeTableModal() {
+                modal.classList.remove('active');
+                modal.setAttribute('aria-hidden', 'true');
+                modalCanvas.innerHTML = '';
+                activeTable = null;
+                document.body.style.overflow = '';
+            }
+
+            document.querySelectorAll('.table-expand-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const targetId = this.getAttribute('data-target');
+                    const container = document.getElementById(targetId);
+                    if (container) openTableModal(container);
+                });
+            });
+
+            document.querySelectorAll('.table-copy-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const targetId = this.getAttribute('data-target');
+                    const container = document.getElementById(targetId);
+                    if (container) {
+                        const table = container.querySelector('table');
+                        if (table) copyTableToClipboard(table, 'csv', this);
+                    }
+                });
+            });
+
+            if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeTableModal);
+            if (modalBackdrop) modalBackdrop.addEventListener('click', closeTableModal);
+
+            if (copyCsvBtn) {
+                copyCsvBtn.addEventListener('click', function() {
+                    if (activeTable) copyTableToClipboard(activeTable, 'csv', copyCsvBtn);
+                });
+            }
+
+            if (copyMdBtn) {
+                copyMdBtn.addEventListener('click', function() {
+                    if (activeTable) copyTableToClipboard(activeTable, 'md', copyMdBtn);
+                });
+            }
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modal.classList.contains('active')) {
+                    closeTableModal();
+                }
+            });
+
+            function copyTableToClipboard(table, format, btn) {
+                let text = '';
+                const rows = Array.from(table.querySelectorAll('tr'));
+                if (format === 'csv') {
+                    text = rows.map(row => {
+                        const cells = Array.from(row.querySelectorAll('th, td'));
+                        return cells.map(cell => {
+                            let val = cell.innerText.trim().replace(/"/g, '""');
+                            return `"${val}"`;
+                        }).join(',');
+                    }).join('\n');
+                } else if (format === 'md') {
+                    text = rows.map((row, idx) => {
+                        const cells = Array.from(row.querySelectorAll('th, td'));
+                        const line = '| ' + cells.map(cell => cell.innerText.trim().replace(/\|/g, '\\|')).join(' | ') + ' |';
+                        if (idx === 0) {
+                            const sep = '| ' + cells.map(() => '---').join(' | ') + ' |';
+                            return line + '\n' + sep;
+                        }
+                        return line;
+                    }).join('\n');
+                }
+
+                navigator.clipboard.writeText(text).then(() => {
+                    const span = btn.querySelector('span') || btn;
+                    const originalText = span.textContent;
+                    span.textContent = '✓ Copied!';
+                    setTimeout(() => { span.textContent = originalText; }, 2000);
+                }).catch(err => {
+                    console.error('Failed to copy table: ', err);
+                });
+            }
+        });
+    </script>
+
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const imgModal = document.getElementById('df-image-modal');
+            if (!imgModal) return;
+
+            const imgBackdrop = imgModal.querySelector('.image-modal-backdrop');
+            const imgCloseBtn = document.getElementById('image-modal-close');
+            const modalImg = document.getElementById('image-modal-img');
+            const modalTitle = document.getElementById('image-modal-title-text');
+            const imgBody = document.getElementById('image-modal-body');
+            const imgCanvas = document.getElementById('image-modal-canvas');
+            const zoomInBtn = document.getElementById('image-zoom-in');
+            const zoomOutBtn = document.getElementById('image-zoom-out');
+            const zoomResetBtn = document.getElementById('image-zoom-reset');
+            const newTabBtn = document.getElementById('image-new-tab');
+
+            let scale = 1.0;
+            let panX = 0;
+            let panY = 0;
+            let isDragging = false;
+            let startX = 0;
+            let startY = 0;
+
+            function updateTransform() {
+                imgCanvas.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+            }
+
+            function resetTransform() {
+                scale = 1.0;
+                panX = 0;
+                panY = 0;
+                updateTransform();
+            }
+
+            function closeImageModal() {
+                imgModal.classList.remove('active');
+                imgModal.setAttribute('aria-hidden', 'true');
+                modalImg.src = '';
+                document.body.style.overflow = '';
+                resetTransform();
+            }
+
+            function openImageModal(img) {
+                if (!img || !img.src) return;
+                modalImg.src = img.src;
+                modalTitle.textContent = img.alt ? img.alt : 'Image Inspection View';
+                resetTransform();
+                imgModal.classList.add('active');
+                imgModal.setAttribute('aria-hidden', 'false');
+                document.body.style.overflow = 'hidden';
+            }
+
+            document.querySelectorAll('.document-content img').forEach(img => {
+                img.style.cursor = 'zoom-in';
+                if (!img.title) img.title = 'Click to inspect in fullscreen lightbox';
+                img.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    openImageModal(this);
+                });
+            });
+
+            if (imgCloseBtn) imgCloseBtn.addEventListener('click', closeImageModal);
+            if (imgBackdrop) imgBackdrop.addEventListener('click', closeImageModal);
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && imgModal.classList.contains('active')) {
+                    closeImageModal();
+                }
+            });
+
+            if (zoomInBtn) zoomInBtn.addEventListener('click', () => { scale = Math.min(scale * 1.25, 8.0); updateTransform(); });
+            if (zoomOutBtn) zoomOutBtn.addEventListener('click', () => { scale = Math.max(scale / 1.25, 0.3); updateTransform(); });
+            if (zoomResetBtn) zoomResetBtn.addEventListener('click', resetTransform);
+            if (newTabBtn) newTabBtn.addEventListener('click', () => {
+                if (modalImg.src) window.open(modalImg.src, '_blank');
+            });
+
+            imgBody.addEventListener('wheel', function(e) {
+                e.preventDefault();
+                const delta = e.deltaY < 0 ? 1.15 : 0.85;
+                scale = Math.min(Math.max(scale * delta, 0.3), 8.0);
+                updateTransform();
+            }, { passive: false });
+
+            imgBody.addEventListener('mousedown', function(e) {
+                if (e.button !== 0) return;
+                isDragging = true;
+                startX = e.clientX - panX;
+                startY = e.clientY - panY;
+                imgBody.classList.add('grabbing');
+            });
+
+            window.addEventListener('mousemove', function(e) {
+                if (!isDragging) return;
+                panX = e.clientX - startX;
+                panY = e.clientY - startY;
+                updateTransform();
+            });
+
+            window.addEventListener('mouseup', function() {
+                if (isDragging) {
+                    isDragging = false;
+                    imgBody.classList.remove('grabbing');
+                }
+            });
+        });
+    </script>
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof mermaid !== 'undefined') {
+                mermaid.initialize({
+                    startOnLoad: false,
+                    theme: 'default',
+                    securityLevel: 'loose'
+                });
+                mermaid.run({ nodes: document.querySelectorAll('.mermaid') });
+            }
+
+            const modal = document.getElementById('mermaid-modal');
+            if (!modal) return;
+
+            const modalBody = document.getElementById('mermaid-modal-body');
+            const canvas = document.getElementById('mermaid-modal-canvas');
+            const backdrop = modal.querySelector('.mermaid-modal-backdrop');
+            const closeBtn = document.getElementById('mermaid-modal-close');
+            const zoomInBtn = document.getElementById('mermaid-zoom-in');
+            const zoomOutBtn = document.getElementById('mermaid-zoom-out');
+            const zoomResetBtn = document.getElementById('mermaid-zoom-reset');
+            const newTabBtn = document.getElementById('mermaid-new-tab');
+
+            let currentSvgRaw = '';
+            let scale = 1.0;
+            let panX = 0;
+            let panY = 0;
+            let isDragging = false;
+            let startX = 0;
+            let startY = 0;
+
+            function updateTransform() {
+                canvas.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+            }
+
+            function resetTransform() {
+                scale = 1.0;
+                panX = 0;
+                panY = 0;
+                updateTransform();
+            }
+
+            function closeModal() {
+                modal.classList.remove('active');
+                modal.setAttribute('aria-hidden', 'true');
+                document.body.style.overflow = '';
+                canvas.innerHTML = '';
+                currentSvgRaw = '';
+                resetTransform();
+            }
+
+            function openModalWithSvg(svg) {
+                if (!svg) {
+                    console.warn("Could not find Mermaid SVG diagram to pop out.");
+                    return;
+                }
+                currentSvgRaw = new XMLSerializer().serializeToString(svg);
+                canvas.innerHTML = currentSvgRaw;
+                const clonedSvg = canvas.querySelector('svg');
+                if (clonedSvg) {
+                    clonedSvg.removeAttribute('style');
+                    clonedSvg.setAttribute('width', '100%');
+                    clonedSvg.setAttribute('height', '100%');
+                    clonedSvg.style.maxWidth = '92vw';
+                    clonedSvg.style.maxHeight = '82vh';
+                    clonedSvg.style.width = '100%';
+                    clonedSvg.style.height = '100%';
+                    clonedSvg.style.display = 'block';
+                }
+                resetTransform();
+                modal.classList.add('active');
+                modal.setAttribute('aria-hidden', 'false');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function findDiagramSvg(btn) {
+                const container = btn.closest('.mermaid-container') || btn.closest('.workflow-container');
+                if (container) {
+                    const mermaidDiv = container.querySelector('.mermaid');
+                    if (mermaidDiv) {
+                        const svg = mermaidDiv.querySelector('svg');
+                        if (svg) return svg;
+                    }
+                }
+                const parent = btn.parentElement;
+                if (parent) {
+                    const next = parent.nextElementSibling;
+                    if (next && next.classList && next.classList.contains('mermaid')) {
+                        return next.querySelector('svg');
+                    }
+                }
+                return null;
+            }
+
+            document.querySelectorAll('.mermaid-expand-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const svg = findDiagramSvg(this);
+                    if (svg) {
+                        openModalWithSvg(svg);
+                    } else {
+                        console.warn("Diagram SVG not ready yet or not found.");
+                    }
+                });
+            });
+
+            document.querySelectorAll('.mermaid').forEach(m => {
+                let container = m.closest('.mermaid-container') || m.closest('.workflow-container');
+                if (!container) {
+                    container = document.createElement('div');
+                    container.className = 'mermaid-container';
+                    m.parentNode.insertBefore(container, m);
+                    container.appendChild(m);
+                }
+                if (!container.querySelector('.mermaid-toolbar')) {
+                    const toolbar = document.createElement('div');
+                    toolbar.className = 'mermaid-toolbar';
+                    toolbar.innerHTML = `
+                        <button type="button" class="mermaid-expand-btn" title="Pop out diagram" aria-label="Pop out diagram">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                            <span>Pop Out</span>
+                        </button>
+                    `;
+                    container.insertBefore(toolbar, container.firstChild);
+                    toolbar.querySelector('.mermaid-expand-btn').addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const svg = m.querySelector('svg');
+                        openModalWithSvg(svg);
+                    });
+                }
+            });
+
+            closeBtn.addEventListener('click', closeModal);
+            backdrop.addEventListener('click', closeModal);
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modal.classList.contains('active')) {
+                    closeModal();
+                }
+            });
+
+            zoomInBtn.addEventListener('click', function() {
+                scale = Math.min(scale * 1.25, 8.0);
+                updateTransform();
+            });
+
+            zoomOutBtn.addEventListener('click', function() {
+                scale = Math.max(scale / 1.25, 0.3);
+                updateTransform();
+            });
+
+            zoomResetBtn.addEventListener('click', resetTransform);
+
+            newTabBtn.addEventListener('click', function() {
+                if (!currentSvgRaw) return;
+                const blob = new Blob([currentSvgRaw], { type: 'image/svg+xml;charset=utf-8' });
+                const blobUrl = URL.createObjectURL(blob);
+                window.open(blobUrl, '_blank');
+            });
+
+            modalBody.addEventListener('wheel', function(e) {
+                e.preventDefault();
+                const delta = e.deltaY < 0 ? 1.15 : 0.85;
+                scale = Math.min(Math.max(scale * delta, 0.3), 8.0);
+                updateTransform();
+            }, { passive: false });
+
+            modalBody.addEventListener('mousedown', function(e) {
+                if (e.button !== 0) return;
+                isDragging = true;
+                startX = e.clientX - panX;
+                startY = e.clientY - panY;
+                modalBody.classList.add('grabbing');
+            });
+
+            window.addEventListener('mousemove', function(e) {
+                if (!isDragging) return;
+                panX = e.clientX - startX;
+                panY = e.clientY - startY;
+                updateTransform();
+            });
+
+            window.addEventListener('mouseup', function() {
+                if (isDragging) {
+                    isDragging = false;
+                    modalBody.classList.remove('grabbing');
+                }
+            });
+        });
+    </script>
+
+    
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme toggle support
+            const themeBtn = document.getElementById('btn-theme-toggle');
+            if (themeBtn) {
+                themeBtn.addEventListener('click', function() {
+                    const htmlEl = document.documentElement;
+                    const currentTheme = htmlEl.getAttribute('data-theme') || (document.body.classList.contains('theme-dark') ? 'dark' : 'light');
+                    const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                    htmlEl.setAttribute('data-theme', nextTheme);
+                    document.body.setAttribute('data-theme', nextTheme);
+                });
+            }
+
+            // Print / Save as PDF support
+            const printBtn = document.getElementById('btn-print');
+            if (printBtn) {
+                printBtn.addEventListener('click', function() {
+                    window.print();
+                });
+            }
+
+            // Download HTML support
+            const downloadBtn = document.getElementById('btn-download');
+            if (downloadBtn) {
+                downloadBtn.addEventListener('click', function() {
+                    const docHtml = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+                    const blob = new Blob([docHtml], { type: 'text/html;charset=utf-8' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    const pageTitle = (document.title || 'document').replace(/[^a-zA-Z0-9_-]+/g, '_');
+                    a.download = pageTitle + '.html';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>
