@@ -1,0 +1,20 @@
+intent_version: '1.0'
+name: 'Manage-Foundry Nudge: ephemeral-hosting-foundry'
+source: Manage-Foundry
+type: technical_debt_remediation
+description: Manage-Foundry detected 1 charter violations during the nightly Active
+  Search.
+agent_instructions: '1. Read and execute the tasks listed in this work order.
+
+  2. Change task statuses from ''todo'' to ''done''.
+
+  3. Append a ''resolution'' block at the root of this YAML containing ''addressed_at''
+  (date), ''notes'', and ''commit_hash'' (if applicable).
+
+  4. IMPORTANT: Move this file from ''handoff/inbox/'' to ''handoff/archive/'' to
+  complete the handoff protocol.'
+tasks:
+- name: Address R04-MISSING-CAPABILITY (CRITICAL)
+  description: Repo is missing a CAPABILITY_REPORT.md, or the report lacks required
+    YAML front matter. All foundries must declare their purpose via front matter.
+  status: todo
